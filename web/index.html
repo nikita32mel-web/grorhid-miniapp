@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GRORHID — Каталог</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root { --bg:#0f1115; --card:#171a21; --text:#e8e8e8; --muted:#a7abb6; --accent:#4aa3ff; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,Roboto,Arial}
+    header{padding:16px 16px 8px}
+    .brand{font-weight:700;font-size:18px}
+    .sub{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.3}
+    .wrap{padding:12px 16px 24px;display:grid;gap:12px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px;display:grid;gap:10px}
+    .row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .name{font-weight:650}
+    .tag{font-size:12px;color:var(--muted)}
+    .price{font-weight:700}
+    .btns{display:flex;gap:10px;flex-wrap:wrap}
+    button,a.btn{appearance:none;border:0;border-radius:12px;padding:10px 12px;font-weight:650;cursor:pointer}
+    a.btn{display:inline-block;text-decoration:none;text-align:center}
+    .primary{background:var(--accent);color:#06111f}
+    .ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.12)}
+    .footer{padding:0 16px 18px;color:var(--muted);font-size:12px;line-height:1.35}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">GRORHID — Каталог</div>
+    <div class="sub">Выберите товар и откройте ссылку на маркетплейс. Можно отправить корзину в бот.</div>
+  </header>
+
+  <main class="wrap" id="list"></main>
+
+  <div class="footer">
+    Поддержка: <b>@melnikovnikitaa</b><br/>
+    Советы в боте: Спатифиллум • Замиокулькас • Орхидея (фаленопсис)
+  </div>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    // ВАЖНО: замени ссылки на свои WB/Ozon
+    const PRODUCTS = [
+      { id:"spat_3l",  name:"Грунт для Спатифиллума GRORHID, 3 л",  price:"— ₽", mp:"WB/Ozon", link:"https://example.com" },
+      { id:"zam_3l",   name:"Грунт для Замиокулькаса GRORHID, 3 л",  price:"— ₽", mp:"WB/Ozon", link:"https://example.com" },
+      { id:"phal_3l",  name:"Субстрат для Орхидеи (Фаленопсис) GRORHID, 3 л", price:"— ₽", mp:"WB/Ozon", link:"https://example.com" }
+    ];
+
+    const cart = new Map(); // id -> qty
+
+    function render() {
+      const root = document.getElementById("list");
+      root.innerHTML = "";
+
+      PRODUCTS.forEach(p => {
+        const qty = cart.get(p.id) || 0;
+
+        const el = document.createElement("div");
+        el.className = "card";
+        el.innerHTML = `
+          <div class="row">
+            <div>
+              <div class="name">${p.name}</div>
+              <div class="tag">${p.mp}</div>
+            </div>
+            <div class="price">${p.price}</div>
+          </div>
+          <div class="btns">
+            <a class="btn primary" href="${p.link}" target="_blank" rel="noopener">Открыть</a>
+            <button class="ghost" data-act="minus" data-id="${p.id}">−</button>
+            <button class="ghost" data-act="plus" data-id="${p.id}">+</button>
+            <button class="ghost" data-act="clear" data-id="${p.id}">Убрать</button>
+            <span class="tag">В корзине: <b>${qty}</b></span>
+          </div>
+        `;
+        root.appendChild(el);
+      });
+
+      // кнопка отправки корзины в бот
+      const send = document.createElement("div");
+      send.className = "card";
+      send.innerHTML = `
+        <div class="row">
+          <div>
+            <div class="name">Корзина</div>
+            <div class="tag">Отправим список выбранного прямо в чат с ботом</div>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="primary" id="sendCart">Отправить корзину в бот</button>
+          <button class="ghost" id="resetAll">Очистить всё</button>
+        </div>
+      `;
+      root.appendChild(send);
+
+      root.querySelectorAll("button[data-act]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const act = btn.dataset.act;
+          const id = btn.dataset.id;
+          const cur = cart.get(id) || 0;
+          if (act === "plus") cart.set(id, cur + 1);
+          if (act === "minus") cart.set(id, Math.max(0, cur - 1));
+          if (act === "clear") cart.set(id, 0);
+          if ((cart.get(id) || 0) === 0) cart.delete(id);
+          render();
+        });
+      });
+
+      document.getElementById("resetAll").onclick = () => { cart.clear(); render(); };
+
+      document.getElementById("sendCart").onclick = () => {
+        const items = [];
+        for (const [id, qty] of cart.entries()) {
+          const p = PRODUCTS.find(x => x.id === id);
+          items.push({ id, name:p?.name || id, qty, link:p?.link });
+        }
+        const payload = { type:"cart", items, ts: Date.now() };
+        if (tg) {
+          tg.sendData(JSON.stringify(payload));
+          tg.close();
+        } else {
+          alert("Открой это из Telegram Mini App, чтобы отправлять данные в бот.");
+        }
+      };
+    }
+
+    render();
+  </script>
+</body>
+</html>
+
