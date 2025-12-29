@@ -2,820 +2,881 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>ГРОРХИД — Каталог растений</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ГРОРХИД — Мини-приложение</title>
 
+  <!-- Telegram Mini App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
     :root{
-      --bg:#0b0d10;
-      --card:#12161c;
-      --text:#e9eef6;
-      --muted:#a9b3c2;
-      --accent:#4da3ff;
-      --border: rgba(255,255,255,.08);
-      --shadow: 0 12px 30px rgba(0,0,0,.35);
-      --radius: 18px;
-      --chip: rgba(255,255,255,.06);
+      --bg:#0f1115;
+      --card:#171a22;
+      --card2:#1d2130;
+      --text:#e8eaed;
+      --muted:#aeb4c0;
+      --line:#2a2f3c;
+      --accent:#4bd4a7;
+      --accent2:#5aa7ff;
+      --warn:#ffcc66;
+      --danger:#ff6b6b;
+      --radius:18px;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
-      background: radial-gradient(1200px 900px at 10% -10%, rgba(77,163,255,.22), transparent 55%),
-                  radial-gradient(900px 700px at 95% 0%, rgba(35,196,131,.14), transparent 55%),
-                  var(--bg);
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,Helvetica,sans-serif;
+      background: linear-gradient(180deg,#0b0d12 0%, #101320 100%);
       color:var(--text);
     }
-    a{color:inherit}
-    .wrap{max-width: 1040px;margin: 0 auto;padding: 18px 16px 140px;}
-    header{
-      position: sticky; top: 0; z-index: 10;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(to bottom, rgba(11,13,16,.92), rgba(11,13,16,.55));
-      border-bottom: 1px solid var(--border);
-      padding: 14px 16px;
+    .wrap{
+      max-width: 980px;
+      margin:0 auto;
+      padding: 14px 14px 28px;
     }
-    .topbar{max-width: 1040px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;}
-    .brand{display:flex;flex-direction:column;gap:2px;min-width: 200px;}
-    .brand .t{font-weight: 900;letter-spacing:.2px;font-size: 16px;}
-    .brand .s{color:var(--muted);font-size: 12px;}
-    .controls{flex:1;display:flex;gap:10px;align-items:center;justify-content:flex-end;}
-    .search{
-      flex:1;max-width: 520px;display:flex;align-items:center;gap:10px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 10px 12px;
+    .topbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 12px;
     }
-    .search input{width:100%;border:0;outline:none;background: transparent;color: var(--text);font-size: 14px;}
-    .pill{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 10px 12px;
-      font-size: 13px;
-      display:flex;align-items:center;gap:8px;
-      cursor:pointer; user-select:none;
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
     }
-    .pill:active{transform: translateY(1px)}
-    .pill .badge{
-      min-width: 20px;height: 20px;padding: 0 6px;border-radius: 999px;
-      background: rgba(77,163,255,.22);
-      border: 1px solid rgba(77,163,255,.35);
-      display:flex;align-items:center;justify-content:center;
-      font-size: 12px;font-weight: 800;
+    .brand .title{
+      font-weight:800;
+      letter-spacing:.4px;
+      font-size:18px;
+      line-height:1.1;
+    }
+    .brand .sub{
+      font-size:12px;
+      color:var(--muted);
     }
 
-    .tabs{display:flex;gap:10px;margin: 16px 0 10px;}
-    .tab{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
+    .right{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .pill{
+      padding:8px 10px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
       border-radius: 999px;
-      padding: 10px 12px;
-      font-size: 13px;
+      font-size:12px;
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .pill strong{ color: var(--text); font-weight:700; }
+    .tabs{
+      display:flex;
+      gap:8px;
+      margin: 8px 0 10px;
+    }
+    .tab{
+      flex:0 0 auto;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      border-radius: 999px;
+      font-size:13px;
+      color: var(--muted);
       cursor:pointer;
       user-select:none;
     }
     .tab.active{
-      background: rgba(77,163,255,.20);
-      border-color: rgba(77,163,255,.35);
-      font-weight: 800;
+      background: rgba(75,212,167,.10);
+      border-color: rgba(75,212,167,.35);
+      color: var(--text);
     }
 
-    .section-title{display:flex;align-items:flex-end;justify-content:space-between;margin: 10px 0 10px;gap: 12px;}
-    .section-title h2{margin:0;font-size: 18px;letter-spacing:.2px;}
-    .section-title .hint{margin:0;color: var(--muted);font-size: 12px;line-height: 1.35;text-align:right;max-width: 420px;}
+    .search{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding: 10px 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+    }
+    .search input{
+      width:100%;
+      border:0;
+      outline:0;
+      background: transparent;
+      color: var(--text);
+      font-size:14px;
+    }
+    .search input::placeholder{ color:#7f8797; }
+    .hint{
+      font-size:12px;
+      color: var(--muted);
+      margin: 0 0 12px;
+      line-height: 1.35;
+    }
 
-    .grid{display:grid;grid-template-columns: repeat(3, minmax(0, 1fr));gap: 12px;}
-    @media (max-width: 880px){.grid{grid-template-columns: repeat(2, minmax(0, 1fr));}.brand{min-width:unset}}
-    @media (max-width: 520px){.grid{grid-template-columns: 1fr;}.search{max-width:unset}.section-title{flex-direction:column;align-items:flex-start}.section-title .hint{text-align:left}}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+    @media (min-width: 760px){
+      .grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border: 1px solid var(--border);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
       overflow:hidden;
-      display:flex;flex-direction:column;
-      min-height: 260px;
+      display:flex;
+      flex-direction:column;
+      min-height: 180px;
     }
     .thumb{
-      height: 118px;
-      background:
-        radial-gradient(600px 180px at 20% 20%, rgba(77,163,255,.23), transparent 55%),
-        radial-gradient(520px 220px at 80% 20%, rgba(35,196,131,.18), transparent 55%),
-        linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border-bottom: 1px solid var(--border);
-      display:flex;align-items:flex-end;
-      padding: 12px;gap: 8px;
+      height: 86px;
+      background: radial-gradient(120px 80px at 20% 30%, rgba(75,212,167,.18), rgba(0,0,0,0) 70%),
+                  radial-gradient(120px 80px at 80% 70%, rgba(90,167,255,.20), rgba(0,0,0,0) 70%),
+                  linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,0));
+      position:relative;
+      padding: 10px 10px 0;
+    }
+    .tagrow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
     }
     .tag{
-      font-size: 12px;padding: 6px 10px;border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.12);
+      font-size:11px;
       color: var(--muted);
-    }
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{
-      font-size: 12px;
-      padding: 6px 10px;
+      padding: 6px 8px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--chip);
-      color: var(--muted);
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.16);
+      backdrop-filter: blur(6px);
     }
 
-    .content{padding: 12px;display:flex;flex-direction:column;gap: 10px;flex: 1;}
-    .name{display:flex;flex-direction:column;gap: 3px;}
-    .name .ru{font-weight: 900;font-size: 16px;line-height: 1.15;}
-    .name .lat{color: var(--muted);font-size: 12px;}
-    .mini{color: var(--muted);font-size: 13px;line-height: 1.35;flex: 1;}
-    .actions{display:flex;gap: 8px;margin-top: 4px;}
+    .content{
+      padding: 10px 10px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      flex:1;
+    }
+    .name .ru{ font-weight:800; font-size:14px; }
+    .name .lat{ color: var(--muted); font-size:12px; margin-top:2px; line-height:1.25; }
+
+    .mini{
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      flex:1;
+    }
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
     .btn{
-      flex:1;border-radius: 12px;border: 1px solid var(--border);
-      background: rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
       color: var(--text);
       padding: 10px 10px;
-      font-size: 13px;
-      cursor:pointer; user-select:none;
-      text-align:center;
+      border-radius: 12px;
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
     }
-    .btn.primary{background: rgba(77,163,255,.20);border-color: rgba(77,163,255,.35);font-weight:800;}
-    .btn:active{transform: translateY(1px)}
-    .btn.wb{background: rgba(255,255,255,.06);}
+    .btn.primary{
+      border-color: rgba(75,212,167,.45);
+      background: rgba(75,212,167,.12);
+    }
+    .btn.wb{
+      border-color: rgba(90,167,255,.40);
+      background: rgba(90,167,255,.10);
+    }
+    .btn.danger{
+      border-color: rgba(255,107,107,.45);
+      background: rgba(255,107,107,.10);
+    }
+    .btn:active{ transform: translateY(1px); }
 
     /* Modal */
-    .modal-backdrop{
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.58);
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.60);
       display:none;
       align-items:flex-end;
       justify-content:center;
-      padding: 14px;
-      z-index: 50;
+      padding: 12px;
+      z-index: 9999;
     }
+    .overlay.show{ display:flex; }
     .modal{
-      width: min(1040px, 100%);
-      max-height: 88vh;
-      overflow:auto;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(18,22,28,.98), rgba(12,14,17,.98));
-      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+      width:100%;
+      max-width: 720px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(23,26,34,.98), rgba(19,22,30,.98));
+      border-radius: 22px;
+      overflow:hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,.55);
     }
-    .modal-head{
+    .modalHead{
       padding: 14px 14px 10px;
-      border-bottom: 1px solid var(--border);
-      display:flex; gap: 10px;
-      align-items:flex-start; justify-content:space-between;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
     }
-    .modal-title{display:flex;flex-direction:column;gap: 2px;}
-    .modal-title .h{font-weight: 950;font-size: 16px;}
-    .modal-title .sub{color: var(--muted);font-size: 12px;}
-    .close{border: 1px solid var(--border);background: rgba(255,255,255,.05);color: var(--text);border-radius: 12px;padding: 10px 12px;cursor:pointer;}
-    .modal-body{
-      padding: 14px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .modalTitle{
+      font-size:16px;
+      font-weight:900;
+      line-height:1.2;
     }
-    @media (max-width: 760px){.modal-body{grid-template-columns: 1fr;}}
-    .block{border: 1px solid var(--border);background: rgba(255,255,255,.04);border-radius: 16px;padding: 12px;}
-    .block h3{margin: 0 0 8px;font-size: 14px;letter-spacing:.2px;}
-    .block p, .block li{margin: 0;color: var(--muted);font-size: 13px;line-height: 1.45;}
-    .block ul{margin: 0;padding-left: 18px;display:flex;flex-direction:column;gap: 6px;}
-    .note{margin-top: 10px;color: var(--muted);font-size: 12px;line-height: 1.4;}
-    .modal-foot{
+    .modalClose{
+      width:38px; height:38px;
+      display:flex; align-items:center; justify-content:center;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      cursor:pointer;
+      user-select:none;
+    }
+    .modalBody{
       padding: 12px 14px 14px;
-      border-top: 1px solid var(--border);
-      display:flex; gap: 10px;
-      align-items:center; justify-content:space-between;
-      flex-wrap: wrap;
+      display:grid;
+      gap:12px;
     }
-    .support{display:flex;gap:10px;align-items:center;color: var(--muted);font-size: 12px;}
-    .support a{color: var(--accent);text-decoration:none;font-weight: 800;}
+    .block{
+      border:1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.02);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .block h3{
+      margin:0 0 8px;
+      font-size:13px;
+      color: var(--muted);
+      font-weight:800;
+      letter-spacing:.2px;
+      text-transform: uppercase;
+    }
+    .block p{
+      margin:0;
+      font-size:13px;
+      line-height:1.45;
+      color: var(--text);
+    }
+    .list{
+      margin:0;
+      padding-left: 16px;
+      color: var(--text);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .list li{ margin: 6px 0; }
+    .row{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top: 10px;
+    }
 
-    /* Drawer */
-    .drawer{position: fixed; inset: 0; display:none; justify-content:flex-end; z-index: 60;}
-    .drawer .shade{flex:1;background: rgba(0,0,0,.58);}
-    .drawer .panel{
-      width: min(440px, 92vw);
-      height: 100%;
-      background: linear-gradient(180deg, rgba(18,22,28,.98), rgba(12,14,17,.98));
-      border-left: 1px solid var(--border);
-      box-shadow: -20px 0 60px rgba(0,0,0,.55);
-      display:flex; flex-direction:column;
+    /* Cart drawer */
+    .cartDrawer{
+      position: fixed;
+      right: 12px; bottom: 12px;
+      width: min(420px, calc(100% - 24px));
+      border:1px solid var(--line);
+      background: rgba(23,26,34,.96);
+      border-radius: 18px;
+      overflow:hidden;
+      display:none;
+      z-index: 9998;
     }
-    .panel-head{padding: 14px;border-bottom: 1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap: 10px;}
-    .panel-head .h{font-weight: 950;font-size: 16px;}
-    .panel-body{padding: 14px;overflow:auto;flex:1;display:flex;flex-direction:column;gap: 10px;}
-    .item{border: 1px solid var(--border);background: rgba(255,255,255,.04);border-radius: 16px;padding: 12px;display:flex;align-items:flex-start;justify-content:space-between;gap: 10px;}
-    .item .left{display:flex;flex-direction:column;gap: 4px;}
-    .item .n{font-weight: 900;font-size: 14px;}
-    .item .d{color: var(--muted);font-size: 12px;line-height: 1.35;}
-    .qty{display:flex;align-items:center;gap: 8px;}
-    .qbtn{width: 34px;height: 34px;border-radius: 10px;border: 1px solid var(--border);background: rgba(255,255,255,.06);color: var(--text);cursor:pointer;font-weight: 950;}
-    .qval{min-width: 18px;text-align:center;font-weight: 900;}
-    .panel-foot{padding: 14px;border-top: 1px solid var(--border);display:flex;flex-direction:column;gap: 10px;}
-    .total{display:flex;align-items:center;justify-content:space-between;color: var(--muted);font-size: 13px;}
-    .total b{color: var(--text)}
-    .buyrow{display:flex;gap: 10px;}
-    .buyrow .btn{flex:1}
-    .small{color: var(--muted);font-size: 12px;line-height: 1.35;}
+    .cartDrawer.show{ display:block; }
+    .cartHead{
+      padding: 12px 12px 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .cartHead .t{
+      font-weight:900;
+      font-size:14px;
+    }
+    .cartBody{
+      max-height: 46vh;
+      overflow:auto;
+      padding: 10px 12px;
+      display:grid;
+      gap:10px;
+    }
+    .cartItem{
+      border:1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.02);
+      border-radius: 14px;
+      padding: 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .cartItem .n{ font-weight:800; font-size:13px; }
+    .cartItem .m{ color: var(--muted); font-size:12px; margin-top:2px; line-height:1.25; }
+    .cartItem a{ color: var(--accent2); text-decoration:none; font-size:12px; }
+    .cartFoot{
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .empty{
+      padding: 20px 0;
+      color: var(--muted);
+      font-size: 13px;
+      text-align:center;
+    }
+    .badge{
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+    }
   </style>
 </head>
 
 <body>
-  <header>
+  <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <div class="t">ГРОРХИД — Mini App</div>
-        <div class="s">Каталог растений • подбор грунта • корзина</div>
+        <div class="title">ГРОРХИД</div>
+        <div class="sub">Уход • Пересадка • Каталог грунтов WB/Ozon • Поддержка</div>
       </div>
 
-      <div class="controls">
-        <div class="search">
-          <span style="opacity:.75">🔎</span>
-          <input id="q" type="text" placeholder="Поиск: растение или грунт (орхидея, 5л, фикус...)" />
-        </div>
-
-        <div id="cartBtn" class="pill" title="Открыть корзину товаров">
-          Корзина <span id="cartCount" class="badge">0</span>
-        </div>
+      <div class="right">
+        <div class="pill" id="openSupportPill">Поддержка <strong>@melnikovnikitaa</strong></div>
+        <div class="pill" id="openCartPill">Корзина <span class="badge" id="cartCount">0</span></div>
       </div>
     </div>
-  </header>
 
-  <div class="wrap">
     <div class="tabs">
       <div id="tabPlants" class="tab active">Растения</div>
-      <div id="tabProducts" class="tab">Грунты (WB)</div>
+      <div id="tabWB" class="tab">WB</div>
+      <div id="tabOZ" class="tab">Ozon</div>
     </div>
 
-    <div class="section-title">
-      <h2 id="title">Растения и рекомендации</h2>
-      <p id="hint" class="hint">
-        Открывай карточку растения — внутри уход, пересадка, видео и рекомендуемый грунт.
-      </p>
+    <div class="search">
+      <input id="q" type="text" placeholder="Поиск: растение / грунт / объём (например: орхидея 2л, замиокулькас, кора)" />
     </div>
 
-    <div id="grid" class="grid"></div>
+    <div class="hint" id="hint">
+      Открывай карточку растения — внутри уход, полив, пересадка, видео и рекомендуемые товары. Во вкладках WB/Ozon — полный каталог.
+    </div>
 
-    <p class="note">
-      Если какой-то информации не нашли — напишите в поддержку:
-      <a href="https://t.me/melnikovnikitaa" target="_blank" rel="noreferrer">@melnikovnikitaa</a>.
-    </p>
+    <div class="grid" id="grid"></div>
+
   </div>
 
-  <!-- Details Modal (plant) -->
-  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-      <div class="modal-head">
-        <div class="modal-title">
-          <div id="mTitle" class="h">—</div>
-          <div id="mSub" class="sub">—</div>
+  <!-- Modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="modalHead">
+        <div>
+          <div class="modalTitle" id="mTitle">Растение</div>
+          <div class="sub" id="mSubtitle" style="margin-top:4px;color:var(--muted);font-size:12px;"></div>
         </div>
-        <button id="mClose" class="close">Закрыть</button>
+        <div class="modalClose" id="mClose">✕</div>
       </div>
-
-      <div class="modal-body">
-        <div class="block">
-          <h3>Как растёт в природе</h3>
-          <p id="mWild">—</p>
-        </div>
-
-        <div class="block">
-          <h3>Свет / температура / влажность</h3>
-          <ul id="mEnv"></ul>
-        </div>
-
-        <div class="block">
-          <h3>Правила полива</h3>
-          <ul id="mWater"></ul>
-        </div>
-
-        <div class="block">
-          <h3>Пересадка</h3>
-          <ul id="mRepot"></ul>
-          <p class="note" id="mRepotNote"></p>
-        </div>
-
-        <div class="block">
-          <h3>Признаки проблем</h3>
-          <ul id="mProblems"></ul>
-        </div>
-
-        <div class="block">
-          <h3>Рекомендуемый грунт ГРОРХИД</h3>
-          <div id="mProductChips" class="chips" style="margin-bottom:10px;"></div>
-          <p class="small" id="mVideoText"></p>
-          <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
-            <button id="mVideoBtn" class="btn primary">Открыть видео</button>
-            <button id="mAddProductBtn" class="btn">Добавить грунт в корзину</button>
-            <button id="mOpenWB" class="btn wb">Открыть на WB</button>
-          </div>
-        </div>
+      <div class="modalBody" id="mBody">
+        <!-- blocks injected -->
       </div>
-
-      <div class="modal-foot">
-        <div class="support">
-          Поддержка: <a href="https://t.me/melnikovnikitaa" target="_blank" rel="noreferrer">@melnikovnikitaa</a>
-          <span style="opacity:.65">•</span>
-          Если не нашли ответ — напишите, и мы добавим информацию в каталог.
+      <div style="padding: 0 14px 14px;">
+        <div class="row">
+          <button class="btn wb" id="mOpenProduct">Открыть товар</button>
+          <button class="btn primary" id="mAddPrimary">В корзину</button>
+          <button class="btn" id="mSupport">Написать в поддержку</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Cart Drawer (products) -->
-  <div id="drawer" class="drawer" aria-hidden="true">
-    <div id="drawerShade" class="shade"></div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="h">Корзина (грунты WB)</div>
-        <button id="drawerClose" class="close">Закрыть</button>
-      </div>
-
-      <div id="cartItems" class="panel-body"></div>
-
-      <div class="panel-foot">
-        <div class="total">
-          <span>Позиций:</span> <b id="totalItems">0</b>
-        </div>
-        <div class="buyrow">
-          <button id="clearCart" class="btn">Очистить</button>
-          <button id="checkoutWB" class="btn primary">Открыть на WB</button>
-        </div>
-        <button id="checkoutSupport" class="btn">Задать вопрос / Поддержка</button>
-
-        <div class="small">
-          «Открыть на WB» откроет ссылки на товары из корзины.
-          «Поддержка» — откроет чат <b>@melnikovnikitaa</b> с вашим списком.
-        </div>
-      </div>
+  <!-- Cart drawer -->
+  <div class="cartDrawer" id="cartDrawer">
+    <div class="cartHead">
+      <div class="t">Корзина</div>
+      <div class="pill" id="closeCartPill">Закрыть</div>
+    </div>
+    <div class="cartBody" id="cartBody"></div>
+    <div class="cartFoot">
+      <button class="btn wb" id="openAllLinks">Открыть товары</button>
+      <button class="btn" id="sendToSupport">Отправить список в поддержку</button>
+      <button class="btn danger" id="clearCart">Очистить</button>
     </div>
   </div>
 
-  <script>
-    const SUPPORT_USERNAME = "melnikovnikitaa";
+<script>
+  // Telegram init
+  const tg = window.Telegram?.WebApp;
+  if(tg){
+    tg.ready();
+    tg.expand();
+  }
 
-    // --- PRODUCTS (WB links from you) ---
-    const products = [
-      { id:"p_spath_5l", name:"Грунт для спатифиллума 5л", volume:"5л", plant:"Спатифиллум", wb:"https://www.wildberries.ru/catalog/450413475/detail.aspx?targetUrl=GP" },
-      { id:"p_zami_5l", name:"Грунт для замиокулькаса 5л", volume:"5л", plant:"Замиокулькас", wb:"https://www.wildberries.ru/catalog/327492373/detail.aspx?targetUrl=GP" },
-      { id:"p_monst_5l", name:"Грунт для монстеры 5л", volume:"5л", plant:"Монстера", wb:"https://www.wildberries.ru/catalog/434106528/detail.aspx?targetUrl=GP" },
-      { id:"p_ficus_5l", name:"Грунт для фикуса и пальм 5л", volume:"5л", plant:"Фикус/Пальмы", wb:"https://www.wildberries.ru/catalog/447870726/detail.aspx?targetUrl=GP" },
-      { id:"p_orch_2l", name:"Грунт для орхидей 2л", volume:"2л", plant:"Орхидея", wb:"https://www.wildberries.ru/catalog/230055721/detail.aspx?targetUrl=GP" },
-      { id:"p_orch_5l", name:"Грунт для орхидей 5л", volume:"5л", plant:"Орхидея", wb:"https://www.wildberries.ru/catalog/340068487/detail.aspx?targetUrl=GP" },
-    ];
+  // --- Helpers ---
+  const esc = (s)=> String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  function openLink(url){
+    if(!url) return;
+    if(tg?.openLink) tg.openLink(url);
+    else window.open(url, "_blank");
+  }
+  function openTgUser(username){
+    const url = "https://t.me/" + String(username).replace("@","");
+    openLink(url);
+  }
 
-    // --- PLANTS (3 now, extend to 10 later) ---
-    const plants = [
-      {
-        id: "spathiphyllum",
-        ru: "Спатифиллум",
-        lat: "Spathiphyllum",
-        tag: "Влажные тропики",
-        short: "Любит равномерную влажность без «болота». Хорошо реагирует на тёплый душ и стабильный уход.",
-        wild: "Спатифиллум — тропическое растение под пологом леса: рассеянный свет, тёплый воздух, постоянно влажный, но рыхлый субстрат. В природе корни получают кислород даже при высокой влажности — поэтому дома важно не превращать грунт в плотную «кашу».",
-        env: [
-          "Свет: яркий рассеянный, без прямого солнца (особенно летом).",
-          "Температура: 18–27°C, без резких сквозняков.",
-          "Влажность: средняя/высокая; полезны опрыскивания и душ (тёплой водой)."
-        ],
-        water: [
-          "Поливай, когда подсохнут верхние 2–3 см субстрата.",
-          "Лей до выхода воды в поддон, затем лишнее сливай через 10–15 минут.",
-          "Зимой полив реже (холодный подоконник = риск перелива).",
-          "Ориентир: листья теряют тургор/слегка «поникают» — обычно просит воду."
-        ],
-        repot: [
-          "Планово: раз в 12–18 месяцев (если активно растёт).",
-          "Срочно: при закисании грунта, запахе сырости, плесени, проблемах с корнями.",
-          "Горшок: +2–3 см к диаметру, обязательно дренажные отверстия.",
-          "После пересадки: 5–7 дней без «заливов», только умеренно."
-        ],
-        repotNote: "Ключ: рыхлый, воздухопроницаемый субстрат. Плотный грунт = риск гнилей.",
-        problems: [
-          "Жёлтые листья + мокрый ком: перелив/плохой дренаж.",
-          "Сухие коричневые кончики: сухой воздух/нерегулярный полив/жёсткая вода.",
-          "Вялость при влажном грунте: корни страдают от нехватки кислорода."
-        ],
-        videoText: "Видео: пересадка спатифиллума (подборка).",
-        videoUrl: "https://www.youtube.com/results?search_query=%D0%BF%D0%B5%D1%80%D0%B5%D1%81%D0%B0%D0%B4%D0%BA%D0%B0+%D1%81%D0%BF%D0%B0%D1%82%D0%B8%D1%84%D0%B8%D0%BB%D0%BB%D1%83%D0%BC%D0%B0",
-        productIds: ["p_spath_5l"]
-      },
-      {
-        id: "zamioculcas",
-        ru: "Замиокулькас",
-        lat: "Zamioculcas zamiifolia",
-        tag: "Засухоустойчивый",
-        short: "Главное правило: лучше недолить, чем перелить. Редкий полив после полного просыхания.",
-        wild: "В природе замиокулькас приспособлен к более засушливым условиям и запасает влагу в клубнях. Поэтому дома он терпит пропуски полива, но плохо переносит переувлажнение и плотный субстрат без воздуха.",
-        env: [
-          "Свет: от яркого рассеянного до солнца (адаптировать постепенно).",
-          "Температура: 18–30°C, не любит холод ниже 15°C.",
-          "Влажность: обычная комнатная; опрыскивания не обязательны."
-        ],
-        water: [
-          "Поливай только после полного просыхания кома (проверяй глубоко).",
-          "Лей умеренно, избыток воды обязательно сливай.",
-          "Зимой полив сильно реже (иногда 1 раз в 3–4 недели).",
-          "Если сомневаешься — подожди 2–3 дня и только потом полей."
-        ],
-        repot: [
-          "Планово: раз в 2–3 года (растёт медленно).",
-          "Срочно: если горшок «распирает» клубнями или грунт стал тяжёлым и пахнет сыростью.",
-          "Горшок: устойчивый, с отверстиями; размер умеренный (не «ведро»).",
-          "После пересадки: 7–10 дней без полива (даём ранкам подсохнуть)."
-        ],
-        repotNote: "Ключ: очень рыхлая смесь и дренаж. Перелив = основной враг замиокулькаса.",
-        problems: [
-          "Жёлтеют стебли/мягкие основания: перелив и гниль.",
-          "Листья морщатся: проблемы с корнями или длительная пересушка.",
-          "Не растёт: мало света или слишком большой горшок."
-        ],
-        videoText: "Видео: пересадка замиокулькаса (подборка).",
-        videoUrl: "https://www.youtube.com/results?search_query=%D0%BF%D0%B5%D1%80%D0%B5%D1%81%D0%B0%D0%B4%D0%BA%D0%B0+%D0%B7%D0%B0%D0%BC%D0%B8%D0%BE%D0%BA%D1%83%D0%BB%D1%8C%D0%BA%D0%B0%D1%81%D0%B0",
-        productIds: ["p_zami_5l"]
-      },
-      {
-        id: "phalaenopsis",
-        ru: "Орхидея фаленопсис",
-        lat: "Phalaenopsis",
-        tag: "Эпифит",
-        short: "Живёт на деревьях, а не в земле. Нужна кора, воздух корням и правильный полив.",
-        wild: "Фаленопсис — эпифит: в природе растёт на коре деревьев. Корни получают много воздуха и быстро просыхают после дождей. Поэтому дома нельзя сажать фаленопсис в «землю» — нужен субстрат на основе коры и вентиляция.",
-        env: [
-          "Свет: яркий рассеянный; восток/запад идеальны, юг только с притенением.",
-          "Температура: 18–28°C; перепады день/ночь стимулируют цветение.",
-          "Влажность: 40–70%; важна циркуляция воздуха (без сквозняков)."
-        ],
-        water: [
-          "Полив по корням: серебристые/серые = пора поливать, зелёные = рано.",
-          "Метод: пролив или замачивание 10–15 минут, затем полностью слить.",
-          "Никогда не оставляй воду в точке роста (в центре розетки).",
-          "Частота: обычно 1 раз в 7–10 дней (зависит от условий)."
-        ],
-        repot: [
-          "Планово: раз в 1,5–2 года (кора разлагается).",
-          "Срочно: если кора стала трухой, запах, плесень, корни гниют.",
-          "Пересадка: удалить гнилые корни, подсушить срезы, посадить в свежую кору.",
-          "После пересадки: 3–5 дней не поливать (если были срезы)."
-        ],
-        repotNote: "Ключ: воздух корням и правильная кора. «Земля» для орхидей почти всегда приводит к проблемам.",
-        problems: [
-          "Мягкие корни/запах: перелив, плохая кора, мало воздуха.",
-          "Сморщенные листья: проблемы с корнями или длительная пересушка.",
-          "Пятна: возможен ожог солнцем или грибок — важна диагностика."
-        ],
-        videoText: "Видео: пересадка фаленопсиса (подборка).",
-        videoUrl: "https://www.youtube.com/results?search_query=%D0%BF%D0%B5%D1%80%D0%B5%D1%81%D0%B0%D0%B4%D0%BA%D0%B0+%D1%84%D0%B0%D0%BB%D0%B5%D0%BD%D0%BE%D0%BF%D1%81%D0%B8%D1%81%D0%B0",
-        productIds: ["p_orch_2l","p_orch_5l"]
-      }
-    ];
+  // --- Data: Products ---
+  const products = [
+    // WB: Orchid soils
+    { id:"wb_orch_soil_1l", name:"Грунт для орхидей 1л", volume:"1л", plant:"Орхидея (фаленопсис)", mp:"WB", url:"https://www.wildberries.ru/catalog/242662173/detail.aspx" },
+    { id:"wb_orch_soil_2l", name:"Грунт для орхидей 2л", volume:"2л", plant:"Орхидея (фаленопсис)", mp:"WB", url:"https://www.wildberries.ru/catalog/230055721/detail.aspx?targetUrl=GP" },
+    { id:"wb_orch_soil_3l", name:"Грунт для орхидей 3л", volume:"3л", plant:"Орхидея (фаленопсис)", mp:"WB", url:"https://www.wildberries.ru/catalog/321372762/detail.aspx?targetUrl=GP" },
+    { id:"wb_orch_soil_5l", name:"Грунт для орхидей 5л", volume:"5л", plant:"Орхидея (фаленопсис)", mp:"WB", url:"https://www.wildberries.ru/catalog/340068487/detail.aspx?targetUrl=GP" },
 
-    // Telegram UI
-    try {
-      const tg = window.Telegram?.WebApp;
-      if (tg) { tg.ready(); tg.expand(); }
-    } catch(_) {}
+    // WB: Other soils
+    { id:"wb_zami_soil_3l", name:"Грунт для замиокулькаса 3л", volume:"3л", plant:"Замиокулькас", mp:"WB", url:"https://www.wildberries.ru/catalog/321383073/detail.aspx" },
+    { id:"wb_zami_soil_5l", name:"Грунт для замиокулькаса 5л", volume:"5л", plant:"Замиокулькас", mp:"WB", url:"https://www.wildberries.ru/catalog/327492373/detail.aspx?targetUrl=GP" },
 
-    // Tabs & search
-    let mode = "plants"; // plants | products
-    const tabPlants = document.getElementById("tabPlants");
-    const tabProducts = document.getElementById("tabProducts");
-    const title = document.getElementById("title");
-    const hint = document.getElementById("hint");
-    const grid = document.getElementById("grid");
-    const q = document.getElementById("q");
+    { id:"wb_spath_soil_3l", name:"Грунт для спатифиллума 3л", volume:"3л", plant:"Спатифиллум", mp:"WB", url:"https://www.wildberries.ru/catalog/591266116/detail.aspx?targetUrl=EX" },
+    { id:"wb_spath_soil_5l", name:"Грунт для спатифиллума 5л", volume:"5л", plant:"Спатифиллум", mp:"WB", url:"https://www.wildberries.ru/catalog/450413475/detail.aspx?targetUrl=GP" },
 
-    tabPlants.onclick = () => setMode("plants");
-    tabProducts.onclick = () => setMode("products");
+    { id:"wb_ficus_soil_5l", name:"Грунт для фикуса и пальм 5л", volume:"5л", plant:"Фикус/Пальмы", mp:"WB", url:"https://www.wildberries.ru/catalog/447870726/detail.aspx?targetUrl=GP" },
+    { id:"wb_monst_soil_5l", name:"Грунт для монстеры 5л", volume:"5л", plant:"Монстера", mp:"WB", url:"https://www.wildberries.ru/catalog/434106528/detail.aspx?targetUrl=GP" },
+    { id:"wb_aroid_soil_5l", name:"Грунт для ароидных 5л", volume:"5л", plant:"Ароидные (антуриум/монстера и др.)", mp:"WB", url:"https://www.wildberries.ru/catalog/432265446/detail.aspx?targetUrl=GP" },
 
-    function setMode(m){
-      mode = m;
-      tabPlants.classList.toggle("active", mode==="plants");
-      tabProducts.classList.toggle("active", mode==="products");
-      if(mode==="plants"){
-        title.textContent = "Растения и рекомендации";
-        hint.textContent = "Открывай карточку растения — внутри уход, пересадка, видео и рекомендуемый грунт.";
-      } else {
-        title.textContent = "Грунты ГРОРХИД на Wildberries";
-        hint.textContent = "Добавляй грунты в корзину и открывай на WB. Можно также написать в поддержку со списком.";
-      }
-      renderGrid();
+    // WB: Extras
+    { id:"wb_leca_5l", name:"Дренаж керамзитовый 5л", volume:"5л", plant:"Универсально", mp:"WB", url:"https://www.wildberries.ru/catalog/278148308/detail.aspx" },
+    { id:"wb_orch_bark_2l", name:"Кора для орхидей 2л", volume:"2л", plant:"Орхидея (фаленопсис)", mp:"WB", url:"https://www.wildberries.ru/catalog/365230106/detail.aspx" },
+    { id:"wb_orch_bark_5l", name:"Кора для орхидей 5л", volume:"5л", plant:"Орхидея (фаленопсис)", mp:"WB", url:"https://www.wildberries.ru/catalog/365245989/detail.aspx" },
+    { id:"wb_mulch_bark_5l", name:"Кора для мульчирования 5л", volume:"5л", plant:"Сад/комнатные", mp:"WB", url:"https://www.wildberries.ru/catalog/265569113/detail.aspx" },
+
+    // OZON
+    { id:"oz_orch_soil_2l", name:"Грунт для орхидей 2л", volume:"2л", plant:"Орхидея (фаленопсис)", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-orhidey-1581895369/?at=QktJjA0g7cLnQ6m3IQ0lO3QtLwx3V1UVGrEYkHWY9knO" },
+    { id:"oz_orch_soil_3l", name:"Грунт для орхидей 3л", volume:"3л", plant:"Орхидея (фаленопсис)", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-orhidey-3l-1655185529/?at=QktJjA0g7cLnQ6m3IQ0lO3QtLwx3V1UVGrEYkHWY9knO&from_sku=1581895369&oos_search=false" },
+    { id:"oz_orch_soil_5l", name:"Грунт для орхидей 5л", volume:"5л", plant:"Орхидея (фаленопсис)", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-orhidey-substrat-5l-1971223869/?at=QktJjA0g7cLnQ6m3IQ0lO3QtLwx3V1UVGrEYkHWY9knO&from_sku=1581895369&oos_search=false" },
+
+    { id:"oz_zami_soil_5l", name:"Грунт для замиокулькаса 5л", volume:"5л", plant:"Замиокулькас", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-zamiokulkasa-5l-2209951547/?_bctx=CAQQhoB8&hs=1" },
+    { id:"oz_spath_soil_5l", name:"Грунт для спатифиллума 5л", volume:"5л", plant:"Спатифиллум", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-spatifilluma-5l-2361594678/?from_sku=2209951547&oos_search=false" },
+    { id:"oz_aroid_soil_5l", name:"Грунт для ароидных 5л", volume:"5л", plant:"Ароидные", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-zamiokulkasa-spatifilluma-anturiuma-monstery-2361164827/?from_sku=2209951547&oos_search=false" },
+
+    { id:"oz_dekab_soil_5l", name:"Грунт для декабриста 5л", volume:"5л", plant:"Декабрист", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-dekabrista-5l-3260866085/?from_sku=2209951547&oos_search=false" },
+    { id:"oz_citrus_soil_5l", name:"Грунт для цитрусовых 5л", volume:"5л", plant:"Цитрусовые", mp:"OZON", url:"https://www.ozon.ru/product/grunt-dlya-tsitrusovyh-rasteniy-limona-mandarina-avokado-i-mango-5l-3261099633/?from_sku=2209951547&oos_search=false" },
+  ];
+
+  // --- Data: Plants (3 сейчас, легко расширим до 10) ---
+  const plants = [
+    {
+      id:"spath",
+      name:"Спатифиллум",
+      latin:"Spathiphyllum",
+      tags:["уход","полив","пересадка"],
+      about:"Тропическое растение из влажных лесов Центральной и Южной Америки. В природе растёт в тени, любит стабильную влажность и тёплый воздух.",
+      watering:[
+        "Летом: когда подсохнут верхние 2–3 см грунта (обычно 1–2 раза в неделю).",
+        "Зимой: реже, по просушке (примерно 1 раз в 7–10 дней).",
+        "Вода: мягкая, отстоянная, комнатной температуры."
+      ],
+      repot:[
+        "Пересаживайте каждые 12–18 месяцев, лучше весной.",
+        "Горшок +2–3 см к диаметру. Обязательно дренаж 2–3 см.",
+        "После пересадки 5–7 дней без подкормок, полив умеренный."
+      ],
+      notes:[
+        "Жёлтые листья часто = перелив или жёсткая вода.",
+        "Любит повышенную влажность: опрыскивание/увлажнитель."
+      ],
+      video:"https://www.youtube.com/results?search_query=пересадка+спатифиллума",
+      productIds:["wb_spath_soil_3l","wb_spath_soil_5l","oz_spath_soil_5l"]
+    },
+    {
+      id:"zami",
+      name:"Замиокулькас",
+      latin:"Zamioculcas zamiifolia",
+      tags:["непереливать","суккулентный","пересадка"],
+      about:"Родом из Восточной Африки. В природе переносит засуху, растёт в рыхлых субстратах. Главная ошибка дома — перелив.",
+      watering:[
+        "Поливать только после почти полной просушки (летом раз в 10–14 дней, зимой реже).",
+        "Чем прохладнее и темнее — тем реже полив.",
+        "Если сомневаетесь — лучше не полить."
+      ],
+      repot:[
+        "Пересадка раз в 18–24 месяца (или если горшок трескается/корни выталкивают).",
+        "Нужен очень рыхлый субстрат и дренаж.",
+        "После пересадки 7 дней не поливать, затем аккуратно."
+      ],
+      notes:[
+        "Жёлтые мягкие стебли — почти всегда перелив.",
+        "Любит яркий рассеянный свет."
+      ],
+      video:"https://www.youtube.com/results?search_query=пересадка+замиокулькаса",
+      productIds:["wb_zami_soil_3l","wb_zami_soil_5l","oz_zami_soil_5l"]
+    },
+    {
+      id:"orch",
+      name:"Орхидея (Фаленопсис)",
+      latin:"Phalaenopsis",
+      tags:["кора","воздух","корни"],
+      about:"Эпифит: в природе растёт на деревьях, корни дышат. Ей нужен воздушный субстрат (кора) и правильный режим полива.",
+      watering:[
+        "Полив после просушки коры: корни стали серебристыми — можно поливать.",
+        "Лучше замачивание 10–15 минут и дать полностью стечь.",
+        "Не оставлять воду в розетке листьев."
+      ],
+      repot:[
+        "Пересадка каждые 12–18 месяцев или при разложении коры.",
+        "Удалите гнилые корни, срезы присыпать углём/корицей.",
+        "Первые 3–5 дней без полива, затем аккуратно."
+      ],
+      notes:[
+        "Прозрачный горшок — плюс: видно корни и влагу.",
+        "Кора должна быть фракцией, не пылью."
+      ],
+      video:"https://www.youtube.com/results?search_query=пересадка+фаленопсиса",
+      productIds:["wb_orch_soil_1l","wb_orch_soil_2l","wb_orch_soil_3l","wb_orch_soil_5l","wb_orch_bark_2l","wb_orch_bark_5l","wb_leca_5l","oz_orch_soil_2l","oz_orch_soil_3l","oz_orch_soil_5l"]
+    },
+  ];
+
+  // --- UI refs ---
+  const grid = document.getElementById("grid");
+  const q = document.getElementById("q");
+  const hint = document.getElementById("hint");
+
+  const tabPlants = document.getElementById("tabPlants");
+  const tabWB = document.getElementById("tabWB");
+  const tabOZ = document.getElementById("tabOZ");
+
+  const overlay = document.getElementById("overlay");
+  const mClose = document.getElementById("mClose");
+  const mTitle = document.getElementById("mTitle");
+  const mSubtitle = document.getElementById("mSubtitle");
+  const mBody = document.getElementById("mBody");
+  const mOpenProduct = document.getElementById("mOpenProduct");
+  const mAddPrimary = document.getElementById("mAddPrimary");
+  const mSupport = document.getElementById("mSupport");
+
+  const openSupportPill = document.getElementById("openSupportPill");
+  const openCartPill = document.getElementById("openCartPill");
+  const cartCount = document.getElementById("cartCount");
+
+  const cartDrawer = document.getElementById("cartDrawer");
+  const cartBody = document.getElementById("cartBody");
+  const closeCartPill = document.getElementById("closeCartPill");
+  const clearCartBtn = document.getElementById("clearCart");
+  const openAllLinksBtn = document.getElementById("openAllLinks");
+  const sendToSupportBtn = document.getElementById("sendToSupport");
+
+  // --- State ---
+  let mode = "plants"; // plants | wb | oz
+  let activePrimaryProductId = null;
+
+  // cart: Map productId -> qty
+  const cart = new Map();
+
+  // --- Support ---
+  const SUPPORT_USERNAME = "@melnikovnikitaa";
+
+  openSupportPill.onclick = ()=> openTgUser(SUPPORT_USERNAME);
+  mSupport.onclick = ()=> openTgUser(SUPPORT_USERNAME);
+
+  // --- Tabs ---
+  tabPlants.onclick = ()=> setMode("plants");
+  tabWB.onclick = ()=> setMode("wb");
+  tabOZ.onclick = ()=> setMode("oz");
+
+  function setMode(m){
+    mode = m;
+    tabPlants.classList.toggle("active", mode==="plants");
+    tabWB.classList.toggle("active", mode==="wb");
+    tabOZ.classList.toggle("active", mode==="oz");
+
+    if(mode==="plants"){
+      hint.textContent = "Открывай карточку растения — внутри уход, полив, пересадка, видео и рекомендуемые товары. Если не нашли ответ — пишите в поддержку.";
+    } else if(mode==="wb"){
+      hint.textContent = "Каталог Wildberries: добавляйте товары в корзину, открывайте карточки и при необходимости отправляйте список в поддержку.";
+    } else {
+      hint.textContent = "Каталог Ozon: добавляйте товары в корзину, открывайте карточки и при необходимости отправляйте список в поддержку.";
     }
+    renderGrid();
+  }
 
-    q.addEventListener("input", renderGrid);
+  // --- Search ---
+  q.addEventListener("input", renderGrid);
 
-    function renderGrid(){
-      const query = (q.value || "").trim().toLowerCase();
+  // --- Grid render ---
+  function emptyState(){
+    return `<div class="empty">Ничего не найдено. Попробуйте другой запрос.</div>`;
+  }
 
-      if(mode === "plants"){
-        const items = plants.filter(p=>{
-          if(!query) return true;
-          return (p.ru + " " + p.lat + " " + p.tag).toLowerCase().includes(query);
-        });
+  function renderGrid(){
+    const query = (q.value || "").trim().toLowerCase();
+    if(mode==="plants"){
+      const items = plants.filter(p=>{
+        if(!query) return true;
+        return (p.name+" "+p.latin+" "+(p.tags||[]).join(" ")).toLowerCase().includes(query);
+      });
 
-        grid.innerHTML = items.map(p => `
-          <div class="card">
-            <div class="thumb"><span class="tag">${esc(p.tag)}</span></div>
-            <div class="content">
-              <div class="name">
-                <div class="ru">${esc(p.ru)}</div>
-                <div class="lat">${esc(p.lat)}</div>
-              </div>
-              <div class="mini">${esc(p.short)}</div>
-              <div class="actions">
-                <button class="btn" onclick="openDetails('${p.id}')">Подробнее</button>
-                <button class="btn primary" onclick="addRecommendedProduct('${p.id}')">Грунт в корзину</button>
-              </div>
+      grid.innerHTML = items.map(p=>`
+        <div class="card" onclick="openPlant('${p.id}')">
+          <div class="thumb">
+            <div class="tagrow">
+              ${(p.tags||[]).slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}
             </div>
           </div>
-        `).join("") || emptyState();
+          <div class="content">
+            <div class="name">
+              <div class="ru">${esc(p.name)}</div>
+              <div class="lat">${esc(p.latin)}</div>
+            </div>
+            <div class="mini">${esc(p.about)}</div>
+            <div class="actions">
+              <button class="btn primary" onclick="event.stopPropagation(); openPlant('${p.id}')">Открыть</button>
+              <button class="btn" onclick="event.stopPropagation(); openTgUser('${SUPPORT_USERNAME}')">Поддержка</button>
+            </div>
+          </div>
+        </div>
+      `).join("") || emptyState();
 
-      } else {
-        const items = products.filter(x=>{
-          if(!query) return true;
-          return (x.name + " " + x.volume + " " + x.plant).toLowerCase().includes(query);
-        });
+    } else {
+      const mp = (mode==="wb") ? "WB" : "OZON";
+      const items = products.filter(x=>{
+        if(x.mp !== mp) return false;
+        if(!query) return true;
+        return (x.name+" "+x.volume+" "+x.plant).toLowerCase().includes(query);
+      });
 
-        grid.innerHTML = items.map(pr => `
-          <div class="card">
-            <div class="thumb">
-              <span class="tag">Wildberries</span>
+      grid.innerHTML = items.map(pr=>`
+        <div class="card">
+          <div class="thumb">
+            <div class="tagrow">
+              <span class="tag">${esc(pr.mp)}</span>
               <span class="tag">${esc(pr.volume)}</span>
             </div>
-            <div class="content">
-              <div class="name">
-                <div class="ru">${esc(pr.name)}</div>
-                <div class="lat">Для: ${esc(pr.plant)}</div>
-              </div>
-              <div class="mini">Добавь в корзину и открой на WB. Если нужна помощь с подбором — напиши в поддержку.</div>
-              <div class="actions">
-                <button class="btn wb" onclick="openWB('${pr.wb}')">Открыть WB</button>
-                <button class="btn primary" onclick="addProductToCart('${pr.id}')">В корзину</button>
-              </div>
+          </div>
+          <div class="content">
+            <div class="name">
+              <div class="ru">${esc(pr.name)}</div>
+              <div class="lat">Для: ${esc(pr.plant)}</div>
+            </div>
+            <div class="mini">Добавьте в корзину и откройте карточку на ${esc(pr.mp)}. Если нужен подбор — напишите в поддержку.</div>
+            <div class="actions">
+              <button class="btn wb" onclick="openLink('${pr.url}')">Открыть ${esc(pr.mp)}</button>
+              <button class="btn primary" onclick="addProductToCart('${pr.id}')">В корзину</button>
             </div>
           </div>
-        `).join("") || emptyState();
-      }
+        </div>
+      `).join("") || emptyState();
+    }
+  }
+
+  // expose for onclick in html
+  window.openPlant = (id)=>{
+    const p = plants.find(x=>x.id===id);
+    if(!p) return;
+    showPlantModal(p);
+  };
+
+  function showPlantModal(p){
+    mTitle.textContent = p.name;
+    mSubtitle.textContent = p.latin;
+
+    const rec = (p.productIds||[])
+      .map(pid => products.find(x=>x.id===pid))
+      .filter(Boolean);
+
+    activePrimaryProductId = rec[0]?.id || null;
+
+    const recHtml = rec.length ? `
+      <ul class="list">
+        ${rec.slice(0,10).map(r=>`
+          <li>
+            <strong>${esc(r.name)}</strong> — <span style="color:var(--muted)">${esc(r.mp)} • ${esc(r.volume)}</span>
+            <div class="row" style="margin-top:8px">
+              <button class="btn wb" onclick="openLink('${r.url}')">Открыть</button>
+              <button class="btn primary" onclick="addProductToCart('${r.id}')">В корзину</button>
+            </div>
+          </li>
+        `).join("")}
+      </ul>
+    ` : `<div class="empty">Пока нет привязанных товаров.</div>`;
+
+    mBody.innerHTML = `
+      <div class="block">
+        <h3>Как растение растёт в природе</h3>
+        <p>${esc(p.about)}</p>
+      </div>
+      <div class="block">
+        <h3>Полив</h3>
+        <ul class="list">${(p.watering||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+      </div>
+      <div class="block">
+        <h3>Пересадка</h3>
+        <ul class="list">${(p.repot||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+      </div>
+      <div class="block">
+        <h3>Важные заметки</h3>
+        <ul class="list">${(p.notes||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+      </div>
+      <div class="block">
+        <h3>Видео по теме</h3>
+        <p>
+          Откройте подборку видео (YouTube-поиск):<br/>
+          <a href="${esc(p.video)}" target="_blank" style="color:var(--accent2);text-decoration:none;">${esc(p.video)}</a>
+        </p>
+        <div class="row">
+          <button class="btn wb" onclick="openLink('${p.video}')">Открыть видео</button>
+        </div>
+      </div>
+      <div class="block">
+        <h3>Рекомендуемые товары</h3>
+        ${recHtml}
+        <p style="margin-top:10px;color:var(--muted);font-size:12px;">
+          Если не нашли информацию — напишите в поддержку: ${esc(SUPPORT_USERNAME)}.
+        </p>
+      </div>
+    `;
+
+    // primary buttons
+    mOpenProduct.textContent = "Открыть товар";
+    mOpenProduct.onclick = ()=>{
+      const pp = products.find(x=>x.id===activePrimaryProductId);
+      if(pp?.url) openLink(pp.url);
+      else openTgUser(SUPPORT_USERNAME);
+    };
+
+    mAddPrimary.onclick = ()=>{
+      const pp = products.find(x=>x.id===activePrimaryProductId);
+      if(pp?.id) addProductToCart(pp.id);
+      else alert("Товар не выбран.");
+    };
+
+    overlay.classList.add("show");
+  }
+
+  mClose.onclick = ()=> overlay.classList.remove("show");
+  overlay.addEventListener("click", (e)=>{
+    if(e.target === overlay) overlay.classList.remove("show");
+  });
+
+  // --- Cart ---
+  function addProductToCart(pid){
+    const qty = cart.get(pid) || 0;
+    cart.set(pid, qty+1);
+    updateCartUI(true);
+    if(tg?.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+  }
+  window.addProductToCart = addProductToCart;
+
+  function removeOne(pid){
+    const qty = cart.get(pid) || 0;
+    if(qty<=1) cart.delete(pid);
+    else cart.set(pid, qty-1);
+    updateCartUI(false);
+  }
+
+  function updateCartUI(openDrawer){
+    let count = 0;
+    for(const [,qty] of cart.entries()) count += qty;
+    cartCount.textContent = String(count);
+
+    if(openDrawer) cartDrawer.classList.add("show");
+
+    if(cart.size === 0){
+      cartBody.innerHTML = `<div class="empty">Корзина пустая. Добавьте товары из каталога WB/Ozon или из карточки растения.</div>`;
+      return;
     }
 
-    function emptyState(){
-      return `<div class="block" style="grid-column:1/-1;">
-        <h3>Ничего не найдено</h3>
-        <p>Попробуй другой запрос или очисти поиск.</p>
-      </div>`;
-    }
-
-    // Modal (plant)
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const mTitle = document.getElementById("mTitle");
-    const mSub = document.getElementById("mSub");
-    const mWild = document.getElementById("mWild");
-    const mEnv = document.getElementById("mEnv");
-    const mWater = document.getElementById("mWater");
-    const mRepot = document.getElementById("mRepot");
-    const mRepotNote = document.getElementById("mRepotNote");
-    const mProblems = document.getElementById("mProblems");
-    const mVideoText = document.getElementById("mVideoText");
-    const mVideoBtn = document.getElementById("mVideoBtn");
-    const mAddProductBtn = document.getElementById("mAddProductBtn");
-    const mOpenWB = document.getElementById("mOpenWB");
-    const mProductChips = document.getElementById("mProductChips");
-    const mClose = document.getElementById("mClose");
-
-    let activePlantId = null;
-    let activePrimaryProductId = null;
-
-    window.openDetails = function(id){
-      const p = plants.find(x=>x.id===id);
-      if(!p) return;
-
-      activePlantId = id;
-
-      mTitle.textContent = p.ru;
-      mSub.textContent = `${p.lat} • ${p.tag}`;
-      mWild.textContent = p.wild;
-
-      mEnv.innerHTML = p.env.map(x=>`<li>${esc(x)}</li>`).join("");
-      mWater.innerHTML = p.water.map(x=>`<li>${esc(x)}</li>`).join("");
-      mRepot.innerHTML = p.repot.map(x=>`<li>${esc(x)}</li>`).join("");
-      mRepotNote.textContent = p.repotNote || "";
-      mProblems.innerHTML = p.problems.map(x=>`<li>${esc(x)}</li>`).join("");
-
-      mVideoText.textContent = p.videoText || "Видео по пересадке.";
-      mVideoBtn.onclick = () => openLink(p.videoUrl);
-
-      // recommended products
-      const rec = (p.productIds || []).map(pid => products.find(pp=>pp.id===pid)).filter(Boolean);
-      activePrimaryProductId = rec[0]?.id || null;
-
-      mProductChips.innerHTML = rec.map((pp, idx)=>`
-        <span class="chip" style="cursor:pointer" onclick="selectPrimaryProduct('${pp.id}')">
-          ${esc(pp.volume)} • ${esc(pp.name.replace("Грунт ",""))}
-        </span>
-      `).join("") || `<span class="chip">Пока нет привязанного грунта</span>`;
-
-      mAddProductBtn.onclick = () => {
-        if(!activePrimaryProductId && rec[0]) activePrimaryProductId = rec[0].id;
-        if(activePrimaryProductId) addProductToCart(activePrimaryProductId);
-      };
-
-      mOpenWB.onclick = () => {
-        const pp = products.find(x=>x.id===activePrimaryProductId) || rec[0];
-        if(pp?.wb) openWB(pp.wb);
-      };
-
-      modalBackdrop.style.display = "flex";
-      modalBackdrop.setAttribute("aria-hidden", "false");
-    }
-
-    window.selectPrimaryProduct = function(pid){
-      activePrimaryProductId = pid;
-      try { window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light"); } catch(_) {}
-    }
-
-    function closeModal(){
-      modalBackdrop.style.display = "none";
-      modalBackdrop.setAttribute("aria-hidden", "true");
-      activePlantId = null;
-      activePrimaryProductId = null;
-    }
-    mClose.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", (e)=>{ if(e.target === modalBackdrop) closeModal(); });
-
-    // Links helpers
-    function openLink(url){
-      const tg = window.Telegram?.WebApp;
-      if(tg && typeof tg.openLink === "function") tg.openLink(url);
-      else window.open(url, "_blank");
-    }
-    function openWB(url){
-      // WB лучше открывать как внешнюю ссылку
-      const tg = window.Telegram?.WebApp;
-      if(tg && typeof tg.openLink === "function") tg.openLink(url);
-      else window.open(url, "_blank");
-    }
-    window.openWB = openWB;
-
-    // Cart (PRODUCTS)
-    const cart = new Map(); // productId -> qty
-    const cartBtn = document.getElementById("cartBtn");
-    const cartCount = document.getElementById("cartCount");
-    const drawer = document.getElementById("drawer");
-    const drawerShade = document.getElementById("drawerShade");
-    const drawerClose = document.getElementById("drawerClose");
-    const cartItems = document.getElementById("cartItems");
-    const totalItems = document.getElementById("totalItems");
-    const clearCart = document.getElementById("clearCart");
-    const checkoutWB = document.getElementById("checkoutWB");
-    const checkoutSupport = document.getElementById("checkoutSupport");
-
-    cartBtn.addEventListener("click", openCart);
-    drawerShade.addEventListener("click", closeCart);
-    drawerClose.addEventListener("click", closeCart);
-
-    clearCart.addEventListener("click", ()=>{
-      cart.clear();
-      renderCart();
-      updateBadge();
-    });
-
-    checkoutWB.addEventListener("click", ()=>{
-      if(cart.size === 0){ alert("Корзина пустая."); return; }
-      // откроем товары по очереди
-      for(const [pid] of cart.entries()){
-        const p = products.find(x=>x.id===pid);
-        if(p?.wb) openWB(p.wb);
-      }
-    });
-
-    checkoutSupport.addEventListener("click", ()=>{
-      const text = buildSupportText();
-      const url = `https://t.me/${SUPPORT_USERNAME}?text=${encodeURIComponent(text)}`;
-      const tg = window.Telegram?.WebApp;
-      if(tg && typeof tg.openTelegramLink === "function") tg.openTelegramLink(url);
-      else if(tg && typeof tg.openLink === "function") tg.openLink(url);
-      else window.open(url, "_blank");
-    });
-
-    window.addProductToCart = function(productId){
-      const qty = cart.get(productId) || 0;
-      cart.set(productId, qty + 1);
-      updateBadge();
-      try { window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light"); } catch(_) {}
-    }
-
-    window.addRecommendedProduct = function(plantId){
-      const p = plants.find(x=>x.id===plantId);
-      const pid = p?.productIds?.[0];
-      if(!pid){ alert("Для этого растения пока не привязан грунт."); return; }
-      addProductToCart(pid);
-    }
-
-    function updateBadge(){
-      let sum = 0;
-      for(const v of cart.values()) sum += v;
-      cartCount.textContent = String(sum);
-      totalItems.textContent = String(sum);
-    }
-
-    function openCart(){
-      renderCart();
-      drawer.style.display = "flex";
-      drawer.setAttribute("aria-hidden", "false");
-    }
-    function closeCart(){
-      drawer.style.display = "none";
-      drawer.setAttribute("aria-hidden", "true");
-    }
-
-    function renderCart(){
-      if(cart.size === 0){
-        cartItems.innerHTML = `
-          <div class="block">
-            <h3>Корзина пустая</h3>
-            <p>Добавь грунты из вкладки «Грунты (WB)» или из карточки растения.</p>
+    const lines = [];
+    for(const [pid, qty] of cart.entries()){
+      const pr = products.find(x=>x.id===pid);
+      if(!pr) continue;
+      lines.push(`
+        <div class="cartItem">
+          <div>
+            <div class="n">${esc(pr.name)} <span class="badge">×${qty}</span></div>
+            <div class="m">${esc(pr.mp)} • ${esc(pr.volume)} • ${esc(pr.plant)}</div>
+            <div style="margin-top:6px;">
+              <a href="${esc(pr.url)}" target="_blank">Открыть карточку</a>
+            </div>
           </div>
-        `;
-        updateBadge();
-        return;
-      }
-
-      const rows = [];
-      for(const [id, qty] of cart.entries()){
-        const pr = products.find(x=>x.id===id);
-        if(!pr) continue;
-        rows.push({pr, qty});
-      }
-
-      cartItems.innerHTML = rows.map(({pr, qty}) => `
-        <div class="item">
-          <div class="left">
-            <div class="n">${esc(pr.name)}</div>
-            <div class="d">Для: ${esc(pr.plant)} • ${esc(pr.volume)}</div>
-            <div class="d"><a href="${esc(pr.wb)}" target="_blank" rel="noreferrer" style="color: var(--accent); text-decoration:none; font-weight:800;">Открыть на WB</a></div>
-          </div>
-
-          <div class="qty">
-            <button class="qbtn" onclick="decQty('${pr.id}')">−</button>
-            <div class="qval">${qty}</div>
-            <button class="qbtn" onclick="incQty('${pr.id}')">+</button>
+          <div class="actions" style="justify-content:flex-end;">
+            <button class="btn" onclick="removeOne('${pid}')">−</button>
+            <button class="btn primary" onclick="addProductToCart('${pid}')">+</button>
           </div>
         </div>
-      `).join("");
-
-      updateBadge();
+      `);
     }
+    cartBody.innerHTML = lines.join("");
+  }
+  window.removeOne = removeOne;
 
-    window.incQty = function(id){
-      cart.set(id, (cart.get(id)||0) + 1);
-      renderCart();
-    }
-    window.decQty = function(id){
-      const v = (cart.get(id)||0) - 1;
-      if(v <= 0) cart.delete(id);
-      else cart.set(id, v);
-      renderCart();
-    }
+  openCartPill.onclick = ()=>{
+    cartDrawer.classList.toggle("show");
+    updateCartUI(false);
+  };
+  closeCartPill.onclick = ()=> cartDrawer.classList.remove("show");
 
-    function buildSupportText(){
-      const lines = [];
-      lines.push("Здравствуйте! Хочу подобрать/заказать грунт ГРОРХИД. В корзине:");
-      if(cart.size === 0) {
-        lines.push("— (пока пусто)");
-      } else {
-        for(const [pid, qty] of cart.entries()){
-          const pr = products.find(x=>x.id===pid);
-          if(!pr) continue;
-          lines.push(`• ${pr.name} — ${qty} шт. (${pr.wb})`);
-        }
-      }
-      lines.push("");
-      lines.push("Нужна консультация по уходу/пересадке и подтверждение выбора.");
-      return lines.join("\n");
-    }
+  clearCartBtn.onclick = ()=>{
+    cart.clear();
+    updateCartUI(false);
+  };
 
-    function esc(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+  openAllLinksBtn.onclick = ()=>{
+    if(cart.size===0){ alert("Корзина пустая."); return; }
+    for(const [pid] of cart.entries()){
+      const p = products.find(x=>x.id===pid);
+      if(p?.url) openLink(p.url);
     }
+  };
 
-    // init
-    setMode("plants");
-    updateBadge();
-  </script>
+  sendToSupportBtn.onclick = ()=>{
+    if(cart.size===0){ openTgUser(SUPPORT_USERNAME); return; }
+
+    const items = [];
+    for(const [pid, qty] of cart.entries()){
+      const pr = products.find(x=>x.id===pid);
+      if(!pr) continue;
+      items.push(`• ${pr.name} (${pr.mp}, ${pr.volume}) ×${qty}\n${pr.url}`);
+    }
+    const text =
+      "Здравствуйте! Нужна помощь с подбором/заказом:\n\n" +
+      items.join("\n\n") +
+      "\n\nСпасибо!";
+
+    // easiest: open support chat; user can paste message
+    openTgUser(SUPPORT_USERNAME);
+    alert("Открыл поддержку. Скопируй текст списка из буфера (если нужно — скажи, я добавлю кнопку копирования).");
+    try{
+      navigator.clipboard.writeText(text);
+    }catch(e){}
+  };
+
+  // initial
+  setMode("plants");
+  updateCartUI(false);
+</script>
 </body>
 </html>
 
