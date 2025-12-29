@@ -4,8 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ГРОРХИД — Mini App</title>
-
-  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
@@ -18,7 +16,6 @@
       --line:rgba(255,255,255,.08);
       --accent:#7c5cff;
       --accent2:#19c37d;
-      --warn:#ffcc66;
       --danger:#ff5c7a;
       --shadow: 0 12px 30px rgba(0,0,0,.35);
       --radius:18px;
@@ -26,289 +23,142 @@
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      background: radial-gradient(1200px 800px at 20% -10%, rgba(124,92,255,.18), transparent 55%),
-                  radial-gradient(900px 700px at 120% 10%, rgba(25,195,125,.12), transparent 55%),
-                  var(--bg);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Noto Sans","Helvetica Neue",sans-serif;
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(124,92,255,.18), transparent 55%),
+        radial-gradient(900px 700px at 120% 10%, rgba(25,195,125,.12), transparent 55%),
+        var(--bg);
       color:var(--text);
     }
-    .wrap{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 18px 14px 86px;
-    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px 14px 20px;}
     .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 14px;
-      background: rgba(18,24,38,.85);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 10px;
-      z-index: 30;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:14px;border:1px solid var(--line);border-radius:var(--radius);
+      background:rgba(18,24,38,.85);box-shadow:var(--shadow);backdrop-filter:blur(10px);
+      position:sticky;top:10px;z-index:30;
     }
-    .brand{
-      display:flex; flex-direction:column; gap:2px;
-      min-width: 180px;
-    }
-    .brand .name{
-      font-weight:800; letter-spacing:.4px;
-    }
-    .brand .desc{
-      font-size:12px; color:var(--muted);
-    }
-    .pill{
-      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .chip{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      color: var(--muted);
-      display:flex; align-items:center; gap:8px;
-    }
-    .chip strong{ color: var(--text); font-weight:700; }
+    .brand{display:flex;flex-direction:column;gap:2px}
+    .brand .name{font-weight:900;letter-spacing:.4px}
+    .brand .desc{font-size:12px;color:var(--muted)}
     .btn{
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
-      cursor:pointer;
-      font-weight:700;
-      transition: .15s ease;
-      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;border-radius:12px;
+      cursor:pointer;font-weight:800;transition:.15s ease;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
       user-select:none;
     }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); }
-    .btn.primary{
-      border-color: rgba(124,92,255,.55);
-      background: rgba(124,92,255,.18);
-    }
-    .btn.primary:hover{ background: rgba(124,92,255,.24); }
-    .btn.success{
-      border-color: rgba(25,195,125,.55);
-      background: rgba(25,195,125,.14);
-    }
-    .btn.success:hover{ background: rgba(25,195,125,.2); }
-    .btn.danger{
-      border-color: rgba(255,92,122,.5);
-      background: rgba(255,92,122,.12);
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: 1.4fr .9fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-    @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
-      .brand{ min-width:unset; }
-    }
+    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.09);}
+    .btn.primary{border-color:rgba(124,92,255,.55);background:rgba(124,92,255,.18);}
+    .btn.primary:hover{background:rgba(124,92,255,.24);}
+    .btn.success{border-color:rgba(25,195,125,.55);background:rgba(25,195,125,.14);}
+    .btn.success:hover{background:rgba(25,195,125,.2);}
+    .btn.danger{border-color:rgba(255,92,122,.5);background:rgba(255,92,122,.12);}
+    .btn.danger:hover{background:rgba(255,92,122,.18);}
+
     .card{
-      background: rgba(18,24,38,.75);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      margin-top:14px;
+      background:rgba(18,24,38,.75);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .card .hd{
-      padding: 14px 14px 10px;
+    .hd{
+      padding:14px 14px 10px;
       border-bottom:1px solid var(--line);
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:12px;
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+      display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
     }
-    .card .hd h2{
-      margin:0;
-      font-size: 16px;
-      letter-spacing:.2px;
-    }
-    .card .hd p{
-      margin:4px 0 0;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .card .bd{ padding: 14px; }
-    .tabs{
-      display:flex; gap:8px; flex-wrap:wrap;
-    }
-    .tab{
-      padding: 9px 11px;
-      border-radius: 999px;
+    .hd h2{margin:0;font-size:16px;letter-spacing:.2px}
+    .hd p{margin:4px 0 0;font-size:12px;color:var(--muted);line-height:1.35}
+    .bd{padding:14px;}
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media(max-width:860px){.grid2{grid-template-columns:1fr}}
+    .bigBtn{
+      width:100%;
+      padding:16px 14px;
+      border-radius:16px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
+      background:rgba(255,255,255,.04);
+      text-align:left;
       cursor:pointer;
-      font-weight:800;
-      font-size: 12px;
+      transition:.15s ease;
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+    }
+    .bigBtn:hover{transform:translateY(-1px);background:rgba(255,255,255,.07);}
+    .bigBtn .t{font-weight:950;font-size:15px;margin:0 0 4px}
+    .bigBtn .s{font-size:12px;color:var(--muted);margin:0;line-height:1.35}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .search{display:flex;gap:10px;margin-top:10px;}
+    .inp{
+      flex:1;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:11px 12px;color:var(--text);
+      outline:none;font-size:14px;
+    }
+    .inp::placeholder{color:rgba(167,180,207,.7);}
+    .list{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px;}
+    .item{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      display:flex;gap:12px;align-items:flex-start;justify-content:space-between;
+    }
+    .meta{display:flex;flex-direction:column;gap:4px;min-width:0;}
+    .ttl{font-weight:950;font-size:14px;line-height:1.25;}
+    .sub{font-size:12px;color:var(--muted);line-height:1.35;}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center;flex-shrink:0;}
+    .badge{
+      font-size:11px;color:var(--muted);
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      border-radius:999px;
+      padding:5px 8px;
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+    }
+    .hr{height:1px;background:var(--line);margin:12px 0;}
+    .hint{font-size:12px;color:var(--muted);line-height:1.35;}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:12px;color:rgba(232,238,252,.9);}
+
+    .pillTabs{display:flex;gap:8px;flex-wrap:wrap;}
+    .pillTab{
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      cursor:pointer;
+      font-weight:900;
+      font-size:12px;
       transition:.12s ease;
       user-select:none;
     }
-    .tab.active{
-      color: var(--text);
-      border-color: rgba(124,92,255,.55);
-      background: rgba(124,92,255,.18);
+    .pillTab.active{
+      color:var(--text);
+      border-color:rgba(124,92,255,.55);
+      background:rgba(124,92,255,.18);
     }
-    .row{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-    }
-    .search{
-      width:100%;
-      display:flex;
-      gap:10px;
-      margin-top:10px;
-    }
-    .inp{
-      flex:1;
-      background: rgba(255,255,255,.04);
+    .sectionBox{
       border:1px solid var(--line);
-      border-radius: 12px;
-      padding: 11px 12px;
-      color: var(--text);
-      outline:none;
-      font-size: 14px;
+      border-radius:16px;
+      padding:12px;
+      background:rgba(15,21,34,.55);
     }
-    .inp::placeholder{ color: rgba(167,180,207,.7); }
-    .list{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 12px;
+    .sectionBox b{display:block;font-size:12px;color:rgba(124,92,255,.95);margin-bottom:6px;letter-spacing:.2px}
+    .sectionBox div{font-size:13px;line-height:1.5;color:var(--text)}
+
+    .navTop{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;
     }
-    .item{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
-      padding: 12px;
-      display:flex;
-      gap: 12px;
-      align-items:flex-start;
-      justify-content:space-between;
-    }
-    .item .meta{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      min-width: 0;
-    }
-    .item .meta .ttl{
-      font-weight:900;
-      font-size: 14px;
-      line-height:1.25;
-    }
-    .item .meta .sub{
-      font-size: 12px;
-      color: var(--muted);
-      line-height:1.35;
-    }
-    .item .actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center;
-      flex-shrink:0;
-    }
-    .badge{
-      font-size: 11px;
-      color: var(--muted);
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      border-radius: 999px;
-      padding: 5px 8px;
-    }
-    .plantCard{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
-      padding: 12px;
-    }
-    .plantTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .plantTop h3{
-      margin:0;
-      font-size: 15px;
-      font-weight: 950;
-    }
-    .plantTop .mini{
-      margin-top:4px;
-      font-size: 12px;
-      color: var(--muted);
-      line-height:1.35;
-    }
-    .kv{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .kv .k{
-      border:1px solid var(--line);
-      border-radius: 14px;
-      padding: 10px 10px;
-      background: rgba(15,21,34,.55);
-    }
-    .kv .k b{
-      display:block;
-      font-size: 12px;
-      color: var(--warn);
-      margin-bottom: 4px;
-      letter-spacing:.2px;
-    }
-    .kv .k span{
-      font-size: 13px;
-      color: var(--text);
-      line-height:1.45;
-    }
-    .hr{
-      height:1px; background: var(--line);
-      margin: 12px 0;
-    }
-    .footerBar{
-      position: fixed;
-      left:0; right:0; bottom:0;
-      padding: 10px 12px;
-      background: rgba(11,15,20,.75);
-      border-top: 1px solid var(--line);
-      backdrop-filter: blur(10px);
-      z-index: 40;
-    }
-    .footerBar .inner{
-      max-width: 980px;
-      margin: 0 auto;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .muted{ color: var(--muted); }
-    .small{ font-size: 12px; }
-    .hint{
-      font-size: 12px;
-      color: var(--muted);
-      line-height:1.35;
-    }
-    .mono{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      color: rgba(232,238,252,.9);
-    }
-    a{ color: inherit; text-decoration: none; }
+    .backBtn{padding:10px 12px;border-radius:12px}
   </style>
 </head>
 
@@ -317,221 +167,209 @@
     <div class="topbar">
       <div class="brand">
         <div class="name">ГРОРХИД</div>
-        <div class="desc">Готовые грунты по растениям + полезный справочник</div>
+        <div class="desc" id="pageSubtitle">Мини-приложение: магазин + справочник</div>
       </div>
-      <div class="pill">
-        <div class="chip">Корзина: <strong id="cartCount">0</strong></div>
-        <button class="btn primary" id="btnOpenShopWB">Магазин WB</button>
-        <button class="btn primary" id="btnOpenShopOZ">Магазин Ozon</button>
+      <div class="row">
+        <button class="btn primary" id="btnHome">Главная</button>
         <button class="btn success" id="btnSupport">Поддержка</button>
       </div>
     </div>
 
-    <div class="grid">
-      <!-- LEFT: MAIN -->
-      <div class="card">
-        <div class="hd">
-          <div>
-            <h2 id="sectionTitle">Каталог</h2>
-            <p id="sectionSubtitle">Выбирай грунт и добавляй в корзину</p>
-          </div>
-          <div class="tabs" id="tabs"></div>
-        </div>
-
-        <div class="bd">
-          <div id="viewCatalog">
-            <div class="search">
-              <input class="inp" id="catalogSearch" placeholder="Поиск по каталогу: орхидея, 5л, кора, керамзит…" />
-              <button class="btn" id="btnClearSearch">Очистить</button>
-            </div>
-            <div class="list" id="catalogList"></div>
-
-            <div class="hr"></div>
-            <div class="hint">
-              Совет: лучше открывать карточки через кнопки «Открыть» — Telegram корректно откроет ссылку во встроенном браузере.
-            </div>
-          </div>
-
-          <div id="viewPlants" style="display:none;">
-            <div class="search">
-              <input class="inp" id="plantSearch" placeholder="Поиск по растениям: спатифиллум, замиокулькас, фикус…" />
-              <button class="btn" id="btnClearPlantSearch">Очистить</button>
-            </div>
-            <div class="list" id="plantsList"></div>
-          </div>
-
-          <div id="viewCart" style="display:none;">
-            <div class="row" style="justify-content:space-between;">
-              <div class="hint">Корзина хранится на твоём устройстве (внутри Telegram). Можно очистить и собрать заново.</div>
-              <button class="btn danger" id="btnClearCart">Очистить корзину</button>
-            </div>
-
-            <div class="list" id="cartList" style="margin-top:12px;"></div>
-
-            <div class="hr"></div>
-
-            <div class="row" style="justify-content:space-between;">
-              <div class="chip">Позиций: <strong id="cartCount2">0</strong></div>
-              <button class="btn success" id="btnCheckout">Открыть все товары из корзины</button>
-            </div>
-
-            <div class="hint" style="margin-top:10px;">
-              «Открыть все» по очереди откроет ссылки на товары. Если Telegram спросит подтверждение — это нормально.
-            </div>
-          </div>
-
-          <div id="viewAbout" style="display:none;">
-            <div class="plantCard">
-              <div class="plantTop">
-                <div>
-                  <h3>О Mini App</h3>
-                  <div class="mini">
-                    Здесь: каталог грунтов ГРОРХИД + полезный справочник по пересадке и уходу.  
-                    Если чего-то не нашли — пишите в поддержку.
-                  </div>
-                </div>
-                <span class="badge">v1.0</span>
-              </div>
-
-              <div class="kv">
-                <div class="k">
-                  <b>Поддержка</b>
-                  <span>Написать: <span class="mono">@melnikovnikitaa</span></span>
-                </div>
-                <div class="k">
-                  <b>WB магазин</b>
-                  <span class="mono">https://www.wildberries.ru/seller/526266</span>
-                </div>
-                <div class="k">
-                  <b>Ozon магазин</b>
-                  <span class="mono">https://www.ozon.ru/seller/grorhid-2031622/</span>
-                </div>
-              </div>
-
-              <div class="hr"></div>
-              <div class="hint">
-                Важно: это Mini App работает автономно на хостинге (Vercel). Терминал и ноутбук для работы Mini App не нужны.
-              </div>
-            </div>
-          </div>
-
+    <!-- HOME -->
+    <div class="card" id="viewHome">
+      <div class="hd">
+        <div>
+          <h2>Главное меню</h2>
+          <p>Выбери, что тебе нужно: купить грунт или посмотреть правила ухода</p>
         </div>
       </div>
-
-      <!-- RIGHT: QUICK ACTIONS -->
-      <div class="card">
-        <div class="hd">
-          <div>
-            <h2>Быстрые действия</h2>
-            <p>Ссылки, поддержка и полезное</p>
+      <div class="bd">
+        <div class="grid2">
+          <div class="bigBtn" id="goShop">
+            <div class="t">Магазин</div>
+            <div class="s">Перейти в WB / Ozon и выбрать товары ГРОРХИД</div>
           </div>
-        </div>
-        <div class="bd">
-          <div class="list">
-            <div class="item">
-              <div class="meta">
-                <div class="ttl">Поддержка</div>
-                <div class="sub">Если нужно уточнить уход/подбор грунта</div>
-              </div>
-              <div class="actions">
-                <button class="btn success" id="btnSupport2">Написать</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="meta">
-                <div class="ttl">Популярные грунты</div>
-                <div class="sub">Замиокулькас / Спатифиллум / Орхидея</div>
-              </div>
-              <div class="actions">
-                <button class="btn" id="btnQuickZami">Замиокулькас</button>
-                <button class="btn" id="btnQuickSpat">Спатифиллум</button>
-                <button class="btn" id="btnQuickOrch">Орхидея</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="meta">
-                <div class="ttl">Справочник растений</div>
-                <div class="sub">Полив, пересадка, как растут в природе</div>
-              </div>
-              <div class="actions">
-                <button class="btn primary" id="btnGoPlants">Открыть</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="meta">
-                <div class="ttl">Корзина</div>
-                <div class="sub">Собери и открой товары для покупки</div>
-              </div>
-              <div class="actions">
-                <button class="btn primary" id="btnGoCart">Открыть</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="meta">
-                <div class="ttl">Магазины</div>
-                <div class="sub">Официальные витрины ГРОРХИД</div>
-              </div>
-              <div class="actions">
-                <button class="btn" id="btnWB2">WB</button>
-                <button class="btn" id="btnOZ2">Ozon</button>
-              </div>
-            </div>
+          <div class="bigBtn" id="goGuide">
+            <div class="t">Справочник растений</div>
+            <div class="s">Выбрать растение → пересадка / полив / уход / природа</div>
           </div>
-
-          <div class="hr"></div>
-          <div class="hint">
-            Если захочешь много растений (100+), мы вынесем данные в JSON и будем подгружать их лениво — чтобы вообще не было лагов.
+          <div class="bigBtn" id="goCatalog">
+            <div class="t">Каталог товаров</div>
+            <div class="s">Все позиции списком (быстрый поиск)</div>
+          </div>
+          <div class="bigBtn" id="goAbout">
+            <div class="t">О нас</div>
+            <div class="s">Контакты, магазины, полезная информация</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="footerBar">
-    <div class="inner">
-      <div class="small muted">ГРОРХИД • Каталог + Справочник</div>
-      <div class="row">
-        <button class="btn" id="btnTabCatalog">Каталог</button>
-        <button class="btn" id="btnTabPlants">Растения</button>
-        <button class="btn" id="btnTabCart">Корзина</button>
-        <button class="btn" id="btnTabAbout">О нас</button>
+    <!-- SHOP -->
+    <div class="card" id="viewShop" style="display:none;">
+      <div class="hd">
+        <div>
+          <h2>Магазин</h2>
+          <p>Открой витрину и выбери нужный грунт</p>
+        </div>
+      </div>
+      <div class="bd">
+        <div class="navTop">
+          <button class="btn backBtn" id="backFromShop">← Назад</button>
+          <div class="row">
+            <button class="btn primary" id="openWBShop">Магазин WB</button>
+            <button class="btn primary" id="openOZShop">Магазин Ozon</button>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="hint">Популярное:</div>
+        <div class="row" style="margin-top:10px;">
+          <button class="btn" id="qOrch">Орхидея</button>
+          <button class="btn" id="qZami">Замиокулькас</button>
+          <button class="btn" id="qSpat">Спатифиллум</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUIDE: PLANTS LIST -->
+    <div class="card" id="viewGuide" style="display:none;">
+      <div class="hd">
+        <div>
+          <h2>Справочник растений</h2>
+          <p>Сначала выбери растение</p>
+        </div>
+      </div>
+      <div class="bd">
+        <div class="navTop">
+          <button class="btn backBtn" id="backFromGuide">← Назад</button>
+          <span class="badge">Шаг 1 из 2</span>
+        </div>
+
+        <div class="search">
+          <input class="inp" id="plantSearch" placeholder="Поиск: спатифиллум, замиокулькас, орхидея, фикус, пальмы…" />
+          <button class="btn" id="clearPlantSearch">Очистить</button>
+        </div>
+
+        <div class="list" id="plantsList"></div>
+      </div>
+    </div>
+
+    <!-- GUIDE: PLANT DETAIL -->
+    <div class="card" id="viewPlant" style="display:none;">
+      <div class="hd">
+        <div>
+          <h2 id="plantTitle">Растение</h2>
+          <p id="plantSubtitle">Выбери раздел</p>
+        </div>
+      </div>
+      <div class="bd">
+        <div class="navTop">
+          <button class="btn backBtn" id="backToPlants">← К растениям</button>
+          <span class="badge">Шаг 2 из 2</span>
+        </div>
+
+        <div class="pillTabs" id="topicTabs"></div>
+
+        <div style="margin-top:12px;" id="topicContent"></div>
+
+        <div class="hr"></div>
+        <div class="hint">Рекомендованные товары:</div>
+        <div class="row" style="margin-top:10px;" id="plantProducts"></div>
+      </div>
+    </div>
+
+    <!-- CATALOG -->
+    <div class="card" id="viewCatalog" style="display:none;">
+      <div class="hd">
+        <div>
+          <h2>Каталог товаров</h2>
+          <p>Поиск по всем позициям</p>
+        </div>
+      </div>
+      <div class="bd">
+        <div class="navTop">
+          <button class="btn backBtn" id="backFromCatalog">← Назад</button>
+          <span class="badge">Список</span>
+        </div>
+
+        <div class="search">
+          <input class="inp" id="catalogSearch" placeholder="Поиск: орхидея 5л, кора, керамзит…" />
+          <button class="btn" id="clearCatalogSearch">Очистить</button>
+        </div>
+
+        <div class="list" id="catalogList"></div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="card" id="viewAbout" style="display:none;">
+      <div class="hd">
+        <div>
+          <h2>О нас</h2>
+          <p>Контакты и магазины</p>
+        </div>
+      </div>
+      <div class="bd">
+        <div class="navTop">
+          <button class="btn backBtn" id="backFromAbout">← Назад</button>
+          <span class="badge">Info</span>
+        </div>
+
+        <div class="sectionBox">
+          <b>Поддержка</b>
+          <div>Написать: <span class="mono">@melnikovnikitaa</span></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="sectionBox">
+          <b>WB магазин</b>
+          <div class="mono">https://www.wildberries.ru/seller/526266</div>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="sectionBox">
+          <b>Ozon магазин</b>
+          <div class="mono">https://www.ozon.ru/seller/grorhid-2031622/</div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="hint">
+          Mini App работает автономно на Vercel — терминал не нужен. Терминал требуется только для обновлений кода.
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ---------------------------
     // Telegram helpers
-    // ---------------------------
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-
     function openLink(url){
       if (tg && tg.openLink) tg.openLink(url);
       else window.open(url, "_blank", "noopener,noreferrer");
     }
-
-    function showAlert(text){
-      if (tg && tg.showAlert) tg.showAlert(text);
-      else alert(text);
-    }
-
-    function haptic(type="impact", style="light"){
+    function haptic(kind="impact", style="light"){
       try{
         if (!tg || !tg.HapticFeedback) return;
-        if (type === "impact") tg.HapticFeedback.impactOccurred(style);
-        if (type === "success") tg.HapticFeedback.notificationOccurred("success");
-        if (type === "error") tg.HapticFeedback.notificationOccurred("error");
-        if (type === "warning") tg.HapticFeedback.notificationOccurred("warning");
+        if (kind==="impact") tg.HapticFeedback.impactOccurred(style);
+        if (kind==="success") tg.HapticFeedback.notificationOccurred("success");
+        if (kind==="warning") tg.HapticFeedback.notificationOccurred("warning");
+        if (kind==="error") tg.HapticFeedback.notificationOccurred("error");
+      }catch(e){}
+    }
+    function initTelegram(){
+      if (!tg) return;
+      try{
+        tg.ready(); tg.expand();
+        tg.setHeaderColor("#0b0f14");
+        tg.setBackgroundColor("#0b0f14");
       }catch(e){}
     }
 
-    // ---------------------------
-    // Data: Products
-    // ---------------------------
+    // Data
     const shops = {
       wb: "https://www.wildberries.ru/seller/526266",
       oz: "https://www.ozon.ru/seller/grorhid-2031622/"
@@ -570,70 +408,71 @@
       { id:"oz_citrus_5", name:"Грунт для цитрусовых 5л (Ozon)", platform:"Ozon", tag:"Цитрусы", url:"https://www.ozon.ru/product/grunt-dlya-tsitrusovyh-rasteniy-limona-mandarina-avokado-i-mango-5l-3261099633/?from_sku=2209951547&oos_search=false" },
     ];
 
-    // ---------------------------
-    // Data: Plants
-    // ---------------------------
     const plants = [
       {
         id:"spathiphyllum",
         title:"Спатифиллум",
-        subtitle:"«Женское счастье»: полив, пересадка, уход, среда в природе",
-        wild:"В природе спатифиллум растёт в тёплых влажных лесах, часто в полутени. Почва богатая органикой, но корни дышат — без застоя воды.",
-        light:"Яркий рассеянный свет. Прямое солнце может обжигать листья. В глубокой тени цветение ухудшается.",
-        watering:"Любит равномерную влажность. Полив после подсыхания верхних 2–3 см. Важно: не превращать горшок в болото.",
-        repotting:"Молодые — раз в 1–2 года. Взрослые — раз в 2–3 года или перевалка. Лучшее время: весна.",
-        tips:"Дренаж обязателен. После пересадки 7–10 дней полив умеренный. При сухом воздухе полезно повышать влажность.",
-        mistakes:"Перелив + тяжёлый грунт, холодные сквозняки, пересушка на солнце.",
+        subtitle:"«Женское счастье»",
+        topics:{
+          wild:"В природе спатифиллум растёт в тёплых влажных лесах, часто в полутени. Почва богатая органикой, но корни должны дышать — без застоя воды.",
+          watering:"Любит равномерную влажность. Полив после подсыхания верхних 2–3 см. Важно: не превращать горшок в болото.",
+          care:"Яркий рассеянный свет. Прямое солнце может обжигать листья. В глубокой тени цветение ухудшается. Дренаж обязателен; при сухом воздухе полезно повышать влажность.",
+          repotting:"Молодые — раз в 1–2 года. Взрослые — раз в 2–3 года или перевалка. Лучшее время: весна. После пересадки 7–10 дней полив умеренный.",
+          mistakes:"Перелив + тяжёлый грунт, холодные сквозняки, пересушка на солнце."
+        },
         products:[
-          { name:"Грунт для спатифиллума 5л (WB)", url:"https://www.wildberries.ru/catalog/450413475/detail.aspx?targetUrl=GP" },
-          { name:"Грунт для спатифиллума 3л (WB)", url:"https://www.wildberries.ru/catalog/591266116/detail.aspx?targetUrl=EX" },
-          { name:"Грунт для спатифиллума 5л (Ozon)", url:"https://www.ozon.ru/product/grunt-dlya-spatifilluma-5l-2361594678/?from_sku=2209951547&oos_search=false" },
+          { name:"Грунт 5л (WB)", url:"https://www.wildberries.ru/catalog/450413475/detail.aspx?targetUrl=GP" },
+          { name:"Грунт 3л (WB)", url:"https://www.wildberries.ru/catalog/591266116/detail.aspx?targetUrl=EX" },
+          { name:"Грунт 5л (Ozon)", url:"https://www.ozon.ru/product/grunt-dlya-spatifilluma-5l-2361594678/?from_sku=2209951547&oos_search=false" },
         ]
       },
       {
         id:"zamioculcas",
         title:"Замиокулькас",
-        subtitle:"«Долларовое дерево»: полив по правилам, пересадка, грунт",
-        wild:"Родина — засушливые районы Восточной Африки. Растение приспособлено запасать воду в клубнях и листьях. Главное — воздух у корней и отсутствие перелива.",
-        light:"От яркого рассеянного до полутени. На солнце — аккуратно, чтобы не было ожогов.",
-        watering:"Лучше недолить, чем перелить. Полив только после хорошего просыхания грунта. Зимой — минимально.",
-        repotting:"Пересадка раз в 2–3 года (или когда горшок тесен). Перевалка предпочтительнее. Горшок чуть больше предыдущего.",
-        tips:"Дренаж обязателен. Рыхлый субстрат. После пересадки 5–7 дней без полива, затем умеренно.",
-        mistakes:"Частый полив, тяжёлый грунт, отсутствие дренажа — ведут к гнили клубней.",
+        subtitle:"«Долларовое дерево»",
+        topics:{
+          wild:"Родина — засушливые районы Восточной Африки. Запасает воду в клубнях и листьях. Главный принцип — воздух у корней и отсутствие перелива.",
+          watering:"Лучше недолить, чем перелить. Полив только после хорошего просыхания грунта. Зимой — минимально.",
+          care:"От яркого рассеянного света до полутени. Дренаж обязателен, субстрат рыхлый.",
+          repotting:"Раз в 2–3 года или когда горшок тесен. Перевалка предпочтительнее. После пересадки 5–7 дней без полива.",
+          mistakes:"Частый полив, тяжёлый грунт, отсутствие дренажа → риск гнили клубней."
+        },
         products:[
-          { name:"Грунт для замиокулькаса 5л (WB)", url:"https://www.wildberries.ru/catalog/327492373/detail.aspx?targetUrl=GP" },
-          { name:"Грунт для замиокулькаса 3л (WB)", url:"https://www.wildberries.ru/catalog/321383073/detail.aspx?targetUrl=GP" },
-          { name:"Грунт для замиокулькаса 5л (Ozon)", url:"https://www.ozon.ru/product/grunt-dlya-zamiokulkasa-5l-2209951547/?_bctx=CAQQhoB8&hs=1" },
+          { name:"Грунт 5л (WB)", url:"https://www.wildberries.ru/catalog/327492373/detail.aspx?targetUrl=GP" },
+          { name:"Грунт 3л (WB)", url:"https://www.wildberries.ru/catalog/321383073/detail.aspx?targetUrl=GP" },
+          { name:"Грунт 5л (Ozon)", url:"https://www.ozon.ru/product/grunt-dlya-zamiokulkasa-5l-2209951547/?_bctx=CAQQhoB8&hs=1" },
         ]
       },
       {
         id:"phalaenopsis",
         title:"Орхидея (Фаленопсис)",
-        subtitle:"Полив, пересадка, кора, как растёт в природе",
-        wild:"Фаленопсисы — эпифиты: в природе растут на коре деревьев, корни получают воздух и влагу из окружающей среды. Грунт им не нужен как земле — нужна структура (кора).",
-        light:"Яркий рассеянный. Прямое солнце может обжечь листья. Хорошо — восточные/западные окна.",
-        watering:"Полив после подсыхания коры. Часто удобнее замачивание 10–15 минут и полное стекание воды. Застой воды в кашпо недопустим.",
-        repotting:"Каждые 1.5–2 года или при разложении коры/проблемах. Пересаживать аккуратно, гнилые корни удалять стерильным инструментом.",
-        tips:"Прозрачный горшок помогает контролировать корни. Не утрамбовывать кору. Важно проветривание.",
-        mistakes:"Посадка в торфяные грунты, постоянная влажность без просушки, вода в розетке листьев.",
+        subtitle:"Эпифит, растёт на коре",
+        topics:{
+          wild:"Фаленопсис — эпифит: в природе растёт на деревьях. Корни получают воздух и влагу из среды. Нужна структура (кора), а не «земля».",
+          watering:"После подсыхания коры. Часто удобнее замачивание 10–15 минут и полное стекание воды. Вода в кашпо/розетке — нельзя.",
+          care:"Яркий рассеянный свет, проветривание. Прозрачный горшок помогает контролировать корни.",
+          repotting:"Каждые 1.5–2 года или при разложении коры/проблемах. Гнилые корни удалять стерильно. Кору не утрамбовывать.",
+          mistakes:"Посадка в торфяные грунты, постоянная влажность без просушки, вода в розетке."
+        },
         products:[
-          { name:"Грунт для орхидей 2л (WB)", url:"https://www.wildberries.ru/catalog/230055721/detail.aspx?targetUrl=GP" },
-          { name:"Грунт для орхидей 5л (WB)", url:"https://www.wildberries.ru/catalog/340068487/detail.aspx?targetUrl=GP" },
-          { name:"Кора для орхидей 2л (WB)", url:"https://www.wildberries.ru/catalog/365230106/detail.aspx" },
-          { name:"Кора для орхидей 5л (WB)", url:"https://www.wildberries.ru/catalog/365245989/detail.aspx" },
-          { name:"Грунт для орхидей 2л (Ozon)", url:"https://www.ozon.ru/product/grunt-dlya-orhidey-1581895369/?at=QktJjA0g7cLnQ6m3IQ0lO3QtLwx3V1UVGrEYkHWY9knO" },
+          { name:"Грунт 2л (WB)", url:"https://www.wildberries.ru/catalog/230055721/detail.aspx?targetUrl=GP" },
+          { name:"Грунт 5л (WB)", url:"https://www.wildberries.ru/catalog/340068487/detail.aspx?targetUrl=GP" },
+          { name:"Кора 2л (WB)", url:"https://www.wildberries.ru/catalog/365230106/detail.aspx" },
+          { name:"Кора 5л (WB)", url:"https://www.wildberries.ru/catalog/365245989/detail.aspx" },
+          { name:"Грунт 2л (Ozon)", url:"https://www.ozon.ru/product/grunt-dlya-orhidey-1581895369/?at=QktJjA0g7cLnQ6m3IQ0lO3QtLwx3V1UVGrEYkHWY9knO" },
         ]
       },
       {
         id:"ficus",
         title:"Фикус",
-        subtitle:"Бенджамина / Каучуконосный: свет, полив, пересадка, типичные ошибки",
-        wild:"Фикусы — тропические/субтропические растения. В природе многие виды вырастают крупными деревьями. Им важна стабильность: тепло, свет и отсутствие застоя воды у корней.",
-        light:"Яркий рассеянный. Полутень допустима, но в тени чаще сбрасывает листья и вытягивается. Избегать палящего солнца.",
-        watering:"Полив, когда подсохнут верхние 2–4 см грунта. Перелив — главный риск (гниль). Зимой полив заметно реже.",
-        repotting:"Молодые — 1 раз в год (весна). Взрослые — раз в 2–3 года + ежегодная замена верхних 3–5 см грунта. Горшок +2–4 см.",
-        tips:"Дренаж обязателен. Рыхлый субстрат. Не заглублять корневую шейку. После пересадки 7–10 дней без переливов.",
-        mistakes:"Перелив, тяжёлый грунт без разрыхлителей, сквозняки, резкие перестановки — часто вызывают листопад.",
+        subtitle:"Бенджамина / Каучуконосный",
+        topics:{
+          wild:"Фикусы — тропические/субтропические. В природе вырастают крупными деревьями. Важна стабильность условий без резких перепадов.",
+          watering:"Полив после подсыхания верхних 2–4 см. Перелив — главный риск. Зимой полив реже.",
+          care:"Яркий рассеянный свет. Избегать сквозняков и резких перестановок. Дренаж обязателен.",
+          repotting:"Молодые — раз в год (весна). Взрослые — раз в 2–3 года + замена верхнего слоя грунта.",
+          mistakes:"Перелив, тяжёлый грунт, сквозняки и перестановки → листопад."
+        },
         products:[
           { name:"Грунт для фикуса и пальм 5л (WB)", url:"https://www.wildberries.ru/catalog/447870726/detail.aspx?targetUrl=GP" },
         ]
@@ -641,381 +480,227 @@
       {
         id:"palms",
         title:"Пальмы",
-        subtitle:"Хамедорея / Арека и др.: полив, пересадка, влажность воздуха",
-        wild:"Пальмы — жители тёплых регионов. Многие растут при рассеянном свете и в дышащей почве. В природе у корней обычно нет застоя воды.",
-        light:"Яркий рассеянный. Прямое солнце может жечь листья, особенно летом. Глубокая тень тормозит рост.",
-        watering:"Грунт должен быть слегка влажным, но не болотистым. Полив после подсыхания верхних 2–3 см. Дренаж — критически важен.",
-        repotting:"Пальмы не любят стресс. Молодые — раз в 1–2 года. Взрослые — раз в 2–4 года (или аккуратная перевалка).",
-        tips:"Аккуратная перевалка без агрессивного разбора корней. При сухом воздухе сохнут кончики — полезно повышать влажность.",
-        mistakes:"Тяжёлый грунт без дренажа, перелив, сухой воздух, холодный сквозняк.",
+        subtitle:"Хамедорея / Арека и др.",
+        topics:{
+          wild:"Пальмы — жители тёплых регионов. У корней важны воздух и отсутствие застоя воды.",
+          watering:"После подсыхания верхних 2–3 см. Дренаж критически важен. Не допускать «болота».",
+          care:"Яркий рассеянный свет. При сухом воздухе сохнут кончики — полезно повышать влажность.",
+          repotting:"Не любят стресс. Молодые — раз в 1–2 года, взрослые — раз в 2–4 года, лучше перевалка.",
+          mistakes:"Тяжёлый грунт без дренажа, перелив, сухой воздух, холодный сквозняк."
+        },
         products:[
           { name:"Грунт для фикуса и пальм 5л (WB)", url:"https://www.wildberries.ru/catalog/447870726/detail.aspx?targetUrl=GP" },
         ]
       }
     ];
 
-    // ---------------------------
-    // Cart storage
-    // ---------------------------
-    const CART_KEY = "grorhid_cart_v1";
-    function getCart(){
-      try{
-        const raw = localStorage.getItem(CART_KEY);
-        const arr = raw ? JSON.parse(raw) : [];
-        return Array.isArray(arr) ? arr : [];
-      }catch(e){ return []; }
-    }
-    function setCart(arr){
-      localStorage.setItem(CART_KEY, JSON.stringify(arr));
-      renderCartCount();
-    }
-    function addToCart(productId){
-      const cart = getCart();
-      if (!cart.includes(productId)) cart.push(productId);
-      setCart(cart);
-      haptic("success");
-    }
-    function removeFromCart(productId){
-      const cart = getCart().filter(id => id !== productId);
-      setCart(cart);
-      haptic("warning");
-    }
-    function clearCart(){
-      setCart([]);
-      haptic("warning");
+    // Views
+    const subtitle = document.getElementById("pageSubtitle");
+    const viewHome = document.getElementById("viewHome");
+    const viewShop = document.getElementById("viewShop");
+    const viewGuide = document.getElementById("viewGuide");
+    const viewPlant = document.getElementById("viewPlant");
+    const viewCatalog = document.getElementById("viewCatalog");
+    const viewAbout = document.getElementById("viewAbout");
+
+    function showOnly(view){
+      [viewHome,viewShop,viewGuide,viewPlant,viewCatalog,viewAbout].forEach(v => v.style.display="none");
+      view.style.display="block";
+      window.scrollTo({top:0,behavior:"smooth"});
     }
 
-    function cartItems(){
-      const cart = getCart();
-      return cart.map(id => products.find(p => p.id === id)).filter(Boolean);
-    }
+    // Home navigation
+    document.getElementById("goShop").addEventListener("click", ()=>{subtitle.textContent="Магазин"; showOnly(viewShop); haptic("impact");});
+    document.getElementById("goGuide").addEventListener("click", ()=>{subtitle.textContent="Справочник"; showOnly(viewGuide); haptic("impact"); renderPlants();});
+    document.getElementById("goCatalog").addEventListener("click", ()=>{subtitle.textContent="Каталог"; showOnly(viewCatalog); haptic("impact"); renderCatalog();});
+    document.getElementById("goAbout").addEventListener("click", ()=>{subtitle.textContent="О нас"; showOnly(viewAbout); haptic("impact");});
 
-    // ---------------------------
-    // Views / tabs
-    // ---------------------------
-    const views = {
-      catalog: document.getElementById("viewCatalog"),
-      plants: document.getElementById("viewPlants"),
-      cart: document.getElementById("viewCart"),
-      about: document.getElementById("viewAbout"),
-    };
+    // Top buttons
+    document.getElementById("btnHome").addEventListener("click", ()=>{subtitle.textContent="Мини-приложение: магазин + справочник"; showOnly(viewHome);});
+    function openSupport(){ openLink("https://t.me/melnikovnikitaa"); }
+    document.getElementById("btnSupport").addEventListener("click", openSupport);
 
-    const sectionTitle = document.getElementById("sectionTitle");
-    const sectionSubtitle = document.getElementById("sectionSubtitle");
+    // Back buttons
+    document.getElementById("backFromShop").addEventListener("click", ()=>{subtitle.textContent="Мини-приложение: магазин + справочник"; showOnly(viewHome);});
+    document.getElementById("backFromGuide").addEventListener("click", ()=>{subtitle.textContent="Мини-приложение: магазин + справочник"; showOnly(viewHome);});
+    document.getElementById("backFromCatalog").addEventListener("click", ()=>{subtitle.textContent="Мини-приложение: магазин + справочник"; showOnly(viewHome);});
+    document.getElementById("backFromAbout").addEventListener("click", ()=>{subtitle.textContent="Мини-приложение: магазин + справочник"; showOnly(viewHome);});
 
-    function setView(name){
-      Object.keys(views).forEach(k => views[k].style.display = (k === name ? "block" : "none"));
-      // header text
-      if (name === "catalog"){
-        sectionTitle.textContent = "Каталог";
-        sectionSubtitle.textContent = "Выбирай грунт и добавляй в корзину";
-      }
-      if (name === "plants"){
-        sectionTitle.textContent = "Растения";
-        sectionSubtitle.textContent = "Уход, полив, пересадка и среда в природе";
-      }
-      if (name === "cart"){
-        sectionTitle.textContent = "Корзина";
-        sectionSubtitle.textContent = "Собери список и открой товары для покупки";
-        renderCart();
-      }
-      if (name === "about"){
-        sectionTitle.textContent = "О нас";
-        sectionSubtitle.textContent = "Контакты, магазины и информация";
-      }
-      // update footer buttons active style
-      setFooterActive(name);
-    }
+    // Shop buttons
+    document.getElementById("openWBShop").addEventListener("click", ()=>openLink(shops.wb));
+    document.getElementById("openOZShop").addEventListener("click", ()=>openLink(shops.oz));
+    document.getElementById("qOrch").addEventListener("click", ()=>openLink("https://www.wildberries.ru/catalog/230055721/detail.aspx?targetUrl=GP"));
+    document.getElementById("qZami").addEventListener("click", ()=>openLink("https://www.wildberries.ru/catalog/327492373/detail.aspx?targetUrl=GP"));
+    document.getElementById("qSpat").addEventListener("click", ()=>openLink("https://www.wildberries.ru/catalog/450413475/detail.aspx?targetUrl=GP"));
 
-    function setFooterActive(name){
-      const map = {
-        catalog: document.getElementById("btnTabCatalog"),
-        plants: document.getElementById("btnTabPlants"),
-        cart: document.getElementById("btnTabCart"),
-        about: document.getElementById("btnTabAbout")
-      };
-      Object.values(map).forEach(b => b.classList.remove("primary"));
-      if (map[name]) map[name].classList.add("primary");
-    }
-
-    // ---------------------------
-    // Render: Catalog
-    // ---------------------------
-    const catalogList = document.getElementById("catalogList");
-    const catalogSearch = document.getElementById("catalogSearch");
-
-    function productMatches(p, q){
-      if (!q) return true;
-      const s = (p.name + " " + p.platform + " " + (p.tag||"")).toLowerCase();
-      return s.includes(q.toLowerCase());
-    }
-
-    function renderCatalog(){
-      const q = (catalogSearch.value || "").trim();
-      const cart = getCart();
-      const filtered = products.filter(p => productMatches(p, q));
-
-      catalogList.innerHTML = "";
-      if (filtered.length === 0){
-        catalogList.innerHTML = `<div class="hint">Ничего не найдено по запросу <span class="mono">${escapeHtml(q)}</span>.</div>`;
-        return;
-      }
-
-      filtered.forEach(p => {
-        const inCart = cart.includes(p.id);
-        const el = document.createElement("div");
-        el.className = "item";
-        el.innerHTML = `
-          <div class="meta">
-            <div class="ttl">${escapeHtml(p.name)}</div>
-            <div class="sub">
-              <span class="badge">${escapeHtml(p.platform)}</span>
-              <span class="badge">${escapeHtml(p.tag || "Грунты")}</span>
-            </div>
-          </div>
-          <div class="actions">
-            <button class="btn" data-open="${escapeAttr(p.url)}">Открыть</button>
-            ${inCart
-              ? `<button class="btn danger" data-remove="${escapeAttr(p.id)}">Убрать</button>`
-              : `<button class="btn success" data-add="${escapeAttr(p.id)}">В корзину</button>`
-            }
-          </div>
-        `;
-        catalogList.appendChild(el);
-      });
-
-      // bind
-      catalogList.querySelectorAll("[data-open]").forEach(btn => {
-        btn.addEventListener("click", () => openLink(btn.getAttribute("data-open")));
-      });
-      catalogList.querySelectorAll("[data-add]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          addToCart(btn.getAttribute("data-add"));
-          renderCatalog();
-        });
-      });
-      catalogList.querySelectorAll("[data-remove]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          removeFromCart(btn.getAttribute("data-remove"));
-          renderCatalog();
-        });
-      });
-    }
-
-    // ---------------------------
-    // Render: Plants
-    // ---------------------------
+    // Guide: list plants
     const plantsList = document.getElementById("plantsList");
     const plantSearch = document.getElementById("plantSearch");
-
-    function plantMatches(p, q){
-      if (!q) return true;
-      const s = (p.title + " " + p.subtitle + " " + p.wild + " " + p.light + " " + p.watering + " " + p.repotting + " " + p.tips + " " + p.mistakes).toLowerCase();
-      return s.includes(q.toLowerCase());
-    }
+    document.getElementById("clearPlantSearch").addEventListener("click", ()=>{plantSearch.value=""; renderPlants();});
+    plantSearch.addEventListener("input", renderPlants);
 
     function renderPlants(){
-      const q = (plantSearch.value || "").trim();
-      const filtered = plants.filter(p => plantMatches(p, q));
-
+      const q = (plantSearch.value||"").trim().toLowerCase();
+      const filtered = plants.filter(p => (p.title+" "+p.subtitle).toLowerCase().includes(q));
       plantsList.innerHTML = "";
-      if (filtered.length === 0){
-        plantsList.innerHTML = `<div class="hint">Ничего не найдено по запросу <span class="mono">${escapeHtml(q)}</span>.</div>`;
+      if (filtered.length===0){
+        plantsList.innerHTML = `<div class="hint">Ничего не найдено.</div>`;
         return;
       }
-
-      filtered.forEach(p => {
-        const el = document.createElement("div");
-        el.className = "plantCard";
-        el.innerHTML = `
-          <div class="plantTop">
-            <div>
-              <h3>${escapeHtml(p.title)}</h3>
-              <div class="mini">${escapeHtml(p.subtitle)}</div>
-            </div>
-            <span class="badge">Справочник</span>
+      filtered.forEach(p=>{
+        const el=document.createElement("div");
+        el.className="item";
+        el.innerHTML=`
+          <div class="meta">
+            <div class="ttl">${escapeHtml(p.title)}</div>
+            <div class="sub">${escapeHtml(p.subtitle)}</div>
           </div>
-
-          <div class="kv">
-            <div class="k"><b>Как растёт в природе</b><span>${escapeHtml(p.wild)}</span></div>
-            <div class="k"><b>Свет</b><span>${escapeHtml(p.light)}</span></div>
-            <div class="k"><b>Полив</b><span>${escapeHtml(p.watering)}</span></div>
-            <div class="k"><b>Пересадка</b><span>${escapeHtml(p.repotting)}</span></div>
-            <div class="k"><b>Важно</b><span>${escapeHtml(p.tips)}</span></div>
-            <div class="k"><b>Частые ошибки</b><span>${escapeHtml(p.mistakes)}</span></div>
-          </div>
-
-          <div class="hr"></div>
-          <div class="row" style="justify-content:space-between; gap:8px;">
-            <div class="hint">Рекомендованные товары:</div>
-            <div class="row" style="justify-content:flex-end;">
-              ${(p.products||[]).map(pr => `
-                <button class="btn" data-plink="${escapeAttr(pr.url)}">${escapeHtml(pr.name.length > 28 ? pr.name.slice(0,28)+"…" : pr.name)}</button>
-              `).join("")}
-            </div>
+          <div class="actions">
+            <button class="btn primary" data-openplant="${escapeAttr(p.id)}">Открыть</button>
           </div>
         `;
         plantsList.appendChild(el);
       });
-
-      plantsList.querySelectorAll("[data-plink]").forEach(btn => {
-        btn.addEventListener("click", () => openLink(btn.getAttribute("data-plink")));
-      });
-    }
-
-    // ---------------------------
-    // Render: Cart
-    // ---------------------------
-    const cartList = document.getElementById("cartList");
-
-    function renderCartCount(){
-      const count = getCart().length;
-      document.getElementById("cartCount").textContent = String(count);
-      document.getElementById("cartCount2").textContent = String(count);
-    }
-
-    function renderCart(){
-      const items = cartItems();
-      cartList.innerHTML = "";
-
-      if (items.length === 0){
-        cartList.innerHTML = `<div class="hint">Корзина пустая. Открой «Каталог» и добавь товары.</div>`;
-        return;
-      }
-
-      items.forEach(p => {
-        const el = document.createElement("div");
-        el.className = "item";
-        el.innerHTML = `
-          <div class="meta">
-            <div class="ttl">${escapeHtml(p.name)}</div>
-            <div class="sub">
-              <span class="badge">${escapeHtml(p.platform)}</span>
-              <span class="badge">${escapeHtml(p.tag || "Грунты")}</span>
-            </div>
-          </div>
-          <div class="actions">
-            <button class="btn" data-open="${escapeAttr(p.url)}">Открыть</button>
-            <button class="btn danger" data-remove="${escapeAttr(p.id)}">Удалить</button>
-          </div>
-        `;
-        cartList.appendChild(el);
-      });
-
-      cartList.querySelectorAll("[data-open]").forEach(btn => {
-        btn.addEventListener("click", () => openLink(btn.getAttribute("data-open")));
-      });
-      cartList.querySelectorAll("[data-remove]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          removeFromCart(btn.getAttribute("data-remove"));
-          renderCart();
-          renderCatalog();
+      plantsList.querySelectorAll("[data-openplant]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = btn.getAttribute("data-openplant");
+          openPlant(id);
         });
       });
     }
 
-    // "Checkout": open all links sequentially
-    async function checkoutOpenAll(){
-      const items = cartItems();
-      if (items.length === 0) return;
-      showAlert("Сейчас открою товары из корзины по очереди.");
-      for (const p of items){
-        openLink(p.url);
-        await sleep(450);
-      }
+    // Guide: plant detail (topics)
+    const plantTitle = document.getElementById("plantTitle");
+    const plantSubtitle = document.getElementById("plantSubtitle");
+    const topicTabs = document.getElementById("topicTabs");
+    const topicContent = document.getElementById("topicContent");
+    const plantProducts = document.getElementById("plantProducts");
+    document.getElementById("backToPlants").addEventListener("click", ()=>{
+      subtitle.textContent="Справочник";
+      showOnly(viewGuide);
+    });
+
+    const TOPICS = [
+      {key:"repotting", label:"Пересадка"},
+      {key:"watering", label:"Полив"},
+      {key:"care", label:"Уход"},
+      {key:"wild", label:"В природе"},
+      {key:"mistakes", label:"Ошибки"},
+    ];
+
+    let currentPlant = null;
+    let currentTopic = "repotting";
+
+    function openPlant(plantId){
+      currentPlant = plants.find(p=>p.id===plantId);
+      if (!currentPlant) return;
+      subtitle.textContent="Справочник";
+      showOnly(viewPlant);
+
+      plantTitle.textContent = currentPlant.title;
+      plantSubtitle.textContent = "Выбери интересующий раздел";
+
+      // Tabs
+      topicTabs.innerHTML = "";
+      TOPICS.forEach(t=>{
+        const b=document.createElement("div");
+        b.className="pillTab" + (t.key===currentTopic ? " active" : "");
+        b.textContent=t.label;
+        b.addEventListener("click", ()=>{
+          currentTopic = t.key;
+          renderTopic();
+        });
+        topicTabs.appendChild(b);
+      });
+
+      // Products
+      plantProducts.innerHTML = "";
+      (currentPlant.products||[]).forEach(pr=>{
+        const b=document.createElement("button");
+        b.className="btn";
+        b.textContent=pr.name;
+        b.addEventListener("click", ()=>openLink(pr.url));
+        plantProducts.appendChild(b);
+      });
+
+      renderTopic();
     }
 
-    function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+    function renderTopic(){
+      // set active tab
+      [...topicTabs.children].forEach((el,i)=>{
+        const key = TOPICS[i].key;
+        el.classList.toggle("active", key===currentTopic);
+      });
 
-    // ---------------------------
-    // Utilities: escape
-    // ---------------------------
+      const titleMap = {
+        repotting:"Правила пересадки",
+        watering:"Правила полива",
+        care:"Правила ухода",
+        wild:"Как растёт в природе",
+        mistakes:"Частые ошибки"
+      };
+
+      const text = currentPlant?.topics?.[currentTopic] || "Нет данных.";
+      topicContent.innerHTML = `
+        <div class="sectionBox">
+          <b>${escapeHtml(titleMap[currentTopic] || "Раздел")}</b>
+          <div>${escapeHtml(text)}</div>
+        </div>
+      `;
+      haptic("impact","light");
+    }
+
+    // Catalog
+    const catalogList = document.getElementById("catalogList");
+    const catalogSearch = document.getElementById("catalogSearch");
+    document.getElementById("clearCatalogSearch").addEventListener("click", ()=>{catalogSearch.value=""; renderCatalog();});
+    catalogSearch.addEventListener("input", renderCatalog);
+
+    function renderCatalog(){
+      const q=(catalogSearch.value||"").trim().toLowerCase();
+      const filtered = products.filter(p => (p.name+" "+p.platform+" "+(p.tag||"")).toLowerCase().includes(q));
+      catalogList.innerHTML="";
+      if(filtered.length===0){
+        catalogList.innerHTML=`<div class="hint">Ничего не найдено.</div>`;
+        return;
+      }
+      filtered.forEach(p=>{
+        const el=document.createElement("div");
+        el.className="item";
+        el.innerHTML=`
+          <div class="meta">
+            <div class="ttl">${escapeHtml(p.name)}</div>
+            <div class="sub">
+              <span class="badge">${escapeHtml(p.platform)}</span>
+              <span class="badge">${escapeHtml(p.tag||"")}</span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" data-open="${escapeAttr(p.url)}">Открыть</button>
+          </div>
+        `;
+        catalogList.appendChild(el);
+      });
+      catalogList.querySelectorAll("[data-open]").forEach(btn=>{
+        btn.addEventListener("click", ()=>openLink(btn.getAttribute("data-open")));
+      });
+    }
+
+    // Utils
     function escapeHtml(s){
       return String(s)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
     function escapeAttr(s){ return escapeHtml(s); }
 
-    // ---------------------------
-    // Bind UI
-    // ---------------------------
-    document.getElementById("btnOpenShopWB").addEventListener("click", () => openLink(shops.wb));
-    document.getElementById("btnOpenShopOZ").addEventListener("click", () => openLink(shops.oz));
-    document.getElementById("btnWB2").addEventListener("click", () => openLink(shops.wb));
-    document.getElementById("btnOZ2").addEventListener("click", () => openLink(shops.oz));
-
-    function openSupport(){
-      // Telegram deep link to username
-      openLink("https://t.me/melnikovnikitaa");
-    }
-    document.getElementById("btnSupport").addEventListener("click", openSupport);
-    document.getElementById("btnSupport2").addEventListener("click", openSupport);
-
-    // Quick product buttons
-    document.getElementById("btnQuickZami").addEventListener("click", () => openLink("https://www.wildberries.ru/catalog/327492373/detail.aspx?targetUrl=GP"));
-    document.getElementById("btnQuickSpat").addEventListener("click", () => openLink("https://www.wildberries.ru/catalog/450413475/detail.aspx?targetUrl=GP"));
-    document.getElementById("btnQuickOrch").addEventListener("click", () => openLink("https://www.wildberries.ru/catalog/230055721/detail.aspx?targetUrl=GP"));
-
-    // Footer tabs
-    document.getElementById("btnTabCatalog").addEventListener("click", () => setView("catalog"));
-    document.getElementById("btnTabPlants").addEventListener("click", () => setView("plants"));
-    document.getElementById("btnTabCart").addEventListener("click", () => setView("cart"));
-    document.getElementById("btnTabAbout").addEventListener("click", () => setView("about"));
-
-    // Right quick nav
-    document.getElementById("btnGoPlants").addEventListener("click", () => setView("plants"));
-    document.getElementById("btnGoCart").addEventListener("click", () => setView("cart"));
-
-    // Search binds
-    document.getElementById("btnClearSearch").addEventListener("click", () => {
-      catalogSearch.value = "";
-      renderCatalog();
-    });
-    catalogSearch.addEventListener("input", () => renderCatalog());
-
-    document.getElementById("btnClearPlantSearch").addEventListener("click", () => {
-      plantSearch.value = "";
-      renderPlants();
-    });
-    plantSearch.addEventListener("input", () => renderPlants());
-
-    // Cart actions
-    document.getElementById("btnClearCart").addEventListener("click", () => {
-      clearCart();
-      renderCart();
-      renderCatalog();
-    });
-    document.getElementById("btnCheckout").addEventListener("click", checkoutOpenAll);
-
-    // ---------------------------
-    // Init Telegram UI
-    // ---------------------------
-    function initTelegram(){
-      if (!tg) return;
-
-      try{
-        tg.ready();
-        tg.expand();
-        tg.setHeaderColor("#0b0f14");
-        tg.setBackgroundColor("#0b0f14");
-
-        // Menu Button (если у тебя включён в BotFather)
-        // Можно не трогать: Telegram сам покажет меню, если настроено.
-      }catch(e){}
-    }
-
-    // ---------------------------
     // Boot
-    // ---------------------------
     initTelegram();
-    renderCartCount();
-    renderCatalog();
-    renderPlants();
-    setView("catalog");
+    showOnly(viewHome);
   </script>
 </body>
 </html>
