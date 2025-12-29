@@ -2,133 +2,956 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GRORHID — Каталог</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>ГРОРХИД — Каталог растений</title>
+
+  <!-- Telegram Mini App helper (не обязательно, но полезно) -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
-    :root { --bg:#0f1115; --card:#171a21; --text:#e8e8e8; --muted:#a7abb6; --accent:#4aa3ff; }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Inter,Segoe UI,Roboto,Arial}
-    header{padding:16px 16px 8px}
-    .brand{font-weight:700;font-size:18px}
-    .sub{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.3}
-    .wrap{padding:12px 16px 24px;display:grid;gap:12px}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px;display:grid;gap:10px}
-    .row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-    .name{font-weight:650}
-    .tag{font-size:12px;color:var(--muted)}
-    .price{font-weight:700}
-    .btns{display:flex;gap:10px;flex-wrap:wrap}
-    button,a.btn{appearance:none;border:0;border-radius:12px;padding:10px 12px;font-weight:650;cursor:pointer}
-    a.btn{display:inline-block;text-decoration:none;text-align:center}
-    .primary{background:var(--accent);color:#06111f}
-    .ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.12)}
-    .footer{padding:0 16px 18px;color:var(--muted);font-size:12px;line-height:1.35}
+    :root{
+      --bg:#0b0d10;
+      --card:#12161c;
+      --card2:#0f1318;
+      --text:#e9eef6;
+      --muted:#a9b3c2;
+      --accent:#4da3ff;
+      --ok:#23c483;
+      --warn:#ffcc66;
+      --bad:#ff6b6b;
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+      background: radial-gradient(1200px 900px at 10% -10%, rgba(77,163,255,.22), transparent 55%),
+                  radial-gradient(900px 700px at 95% 0%, rgba(35,196,131,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit}
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 16px 120px;
+    }
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(11,13,16,.92), rgba(11,13,16,.55));
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+    }
+    .topbar{
+      max-width: 980px;
+      margin: 0 auto;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width: 180px;
+    }
+    .brand .t{
+      font-weight: 800;
+      letter-spacing:.2px;
+      font-size: 16px;
+    }
+    .brand .s{
+      color:var(--muted);
+      font-size: 12px;
+    }
+    .controls{
+      flex:1;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .search{
+      flex:1;
+      max-width: 420px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 12px;
+    }
+    .search input{
+      width:100%;
+      border:0;
+      outline:none;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .pill{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 13px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .pill:active{transform: translateY(1px)}
+    .pill .badge{
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: rgba(77,163,255,.22);
+      border: 1px solid rgba(77,163,255,.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin: 18px 0 10px;
+      gap: 12px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .section-title .hint{
+      margin:0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align:right;
+      max-width: 380px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 820px){
+      .grid{grid-template-columns: repeat(2, minmax(0, 1fr));}
+      .brand{min-width:unset}
+      .controls{justify-content:stretch}
+    }
+    @media (max-width: 520px){
+      .grid{grid-template-columns: 1fr;}
+      .search{max-width:unset}
+      .section-title{flex-direction:column; align-items:flex-start}
+      .section-title .hint{text-align:left}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 260px;
+    }
+    .thumb{
+      height: 118px;
+      background:
+        radial-gradient(600px 180px at 20% 20%, rgba(77,163,255,.23), transparent 55%),
+        radial-gradient(520px 220px at 80% 20%, rgba(35,196,131,.18), transparent 55%),
+        linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items:flex-end;
+      padding: 12px;
+      gap: 8px;
+    }
+    .tag{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.12);
+      color: var(--muted);
+    }
+    .content{
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      flex: 1;
+    }
+    .name{
+      display:flex;
+      flex-direction:column;
+      gap: 3px;
+    }
+    .name .ru{
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 1.15;
+    }
+    .name .lat{
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .mini{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      flex: 1;
+    }
+    .actions{
+      display:flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .btn{
+      flex:1;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 10px;
+      font-size: 13px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn.primary{
+      background: rgba(77,163,255,.20);
+      border-color: rgba(77,163,255,.35);
+    }
+    .btn:active{transform: translateY(1px)}
+
+    /* Modal */
+    .modal-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.58);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding: 14px;
+      z-index: 50;
+    }
+    .modal{
+      width: min(980px, 100%);
+      max-height: 88vh;
+      overflow:auto;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(18,22,28,.98), rgba(12,14,17,.98));
+      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+    }
+    .modal-head{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      justify-content:space-between;
+    }
+    .modal-title{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+    }
+    .modal-title .h{
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .modal-title .sub{
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .close{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor:pointer;
+    }
+    .modal-body{
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 740px){
+      .modal-body{grid-template-columns: 1fr;}
+    }
+    .block{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .block h3{
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .block p, .block li{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .block ul{
+      margin: 0;
+      padding-left: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+    .note{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .modal-foot{
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--border);
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap: wrap;
+    }
+    .support{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .support a{
+      color: var(--accent);
+      text-decoration:none;
+      font-weight: 700;
+    }
+
+    /* Cart drawer */
+    .drawer{
+      position: fixed;
+      inset: 0;
+      display:none;
+      justify-content:flex-end;
+      z-index: 60;
+    }
+    .drawer .shade{
+      flex:1;
+      background: rgba(0,0,0,.58);
+    }
+    .drawer .panel{
+      width: min(420px, 92vw);
+      height: 100%;
+      background: linear-gradient(180deg, rgba(18,22,28,.98), rgba(12,14,17,.98));
+      border-left: 1px solid var(--border);
+      box-shadow: -20px 0 60px rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+    }
+    .panel-head{
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+    }
+    .panel-head .h{
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .panel-body{
+      padding: 14px;
+      overflow:auto;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .item{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+      padding: 12px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .item .left{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+    }
+    .item .n{
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .item .d{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .qty{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .qbtn{
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor:pointer;
+      font-weight: 900;
+    }
+    .qval{
+      min-width: 18px;
+      text-align:center;
+      font-weight: 800;
+    }
+    .panel-foot{
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .total{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .total b{color: var(--text)}
+    .buyrow{
+      display:flex;
+      gap: 10px;
+    }
+    .buyrow .btn{flex:1}
+    .small{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
   </style>
 </head>
 
 <body>
   <header>
-    <div class="brand">GRORHID — Каталог</div>
-    <div class="sub">Выберите товар и откройте ссылку на маркетплейс. Можно отправить корзину в бот.</div>
+    <div class="topbar">
+      <div class="brand">
+        <div class="t">ГРОРХИД — Mini App</div>
+        <div class="s">Каталог растений • уход • пересадка • корзина</div>
+      </div>
+
+      <div class="controls">
+        <div class="search">
+          <span style="opacity:.75">🔎</span>
+          <input id="q" type="text" placeholder="Поиск: спатифиллум, замиокулькас, фаленопсис..." />
+        </div>
+
+        <div id="cartBtn" class="pill" title="Открыть корзину">
+          Корзина <span id="cartCount" class="badge">0</span>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main class="wrap" id="list"></main>
+  <div class="wrap">
+    <div class="section-title">
+      <h2>Растения и рекомендации</h2>
+      <p class="hint">
+        Внутри карточек: как растёт в природе, полив, пересадка, признаки проблем и полезные видео.
+      </p>
+    </div>
 
-  <div class="footer">
-    Поддержка: <b>@melnikovnikitaa</b><br/>
-    Советы в боте: Спатифиллум • Замиокулькас • Орхидея (фаленопсис)
+    <div id="grid" class="grid"></div>
+
+    <p class="note">
+      Если какой-то информации не нашли — напишите нам в поддержку: <a href="https://t.me/melnikovnikitaa" target="_blank" rel="noreferrer">@melnikovnikitaa</a>.
+    </p>
+  </div>
+
+  <!-- Details Modal -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <div class="modal-head">
+        <div class="modal-title">
+          <div id="mTitle" class="h">—</div>
+          <div id="mSub" class="sub">—</div>
+        </div>
+        <button id="mClose" class="close">Закрыть</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="block">
+          <h3>Как растёт в природе</h3>
+          <p id="mWild">—</p>
+        </div>
+
+        <div class="block">
+          <h3>Свет / температура / влажность</h3>
+          <ul id="mEnv"></ul>
+        </div>
+
+        <div class="block">
+          <h3>Правила полива</h3>
+          <ul id="mWater"></ul>
+        </div>
+
+        <div class="block">
+          <h3>Пересадка</h3>
+          <ul id="mRepot"></ul>
+          <p class="note" id="mRepotNote"></p>
+        </div>
+
+        <div class="block">
+          <h3>Признаки проблем</h3>
+          <ul id="mProblems"></ul>
+        </div>
+
+        <div class="block">
+          <h3>Видео по пересадке</h3>
+          <p class="small" id="mVideoText"></p>
+          <div style="display:flex; gap:10px; margin-top:10px;">
+            <button id="mVideoBtn" class="btn primary">Открыть видео</button>
+            <button id="mAddBtn" class="btn">Добавить в корзину</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <div class="support">
+          Поддержка: <a href="https://t.me/melnikovnikitaa" target="_blank" rel="noreferrer">@melnikovnikitaa</a>
+          <span style="opacity:.65">•</span>
+          Если не нашли ответ — напишите, и мы добавим информацию в каталог.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <div id="drawerShade" class="shade"></div>
+    <div class="panel">
+      <div class="panel-head">
+        <div class="h">Корзина</div>
+        <button id="drawerClose" class="close">Закрыть</button>
+      </div>
+
+      <div id="cartItems" class="panel-body"></div>
+
+      <div class="panel-foot">
+        <div class="total">
+          <span>Позиций:</span> <b id="totalItems">0</b>
+        </div>
+        <div class="total">
+          <span>Комментарий:</span> <b>оформление через поддержку</b>
+        </div>
+
+        <div class="buyrow">
+          <button id="clearCart" class="btn">Очистить</button>
+          <button id="checkout" class="btn primary">Оформить</button>
+        </div>
+
+        <div class="small">
+          Сейчас корзина фиксирует ваш выбор. Для оформления заказа и ссылок на маркетплейсы нажмите «Оформить» —
+          откроется чат с поддержкой <b>@melnikovnikitaa</b>.
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    const tg = window.Telegram?.WebApp;
-    if (tg) { tg.ready(); tg.expand(); }
+    // --- Data (3 plants now; потом расширим до 10) ---
+    const SUPPORT_USERNAME = "melnikovnikitaa";
 
-    // ВАЖНО: замени ссылки на свои WB/Ozon
-    const PRODUCTS = [
-      { id:"spat_3l",  name:"Грунт для Спатифиллума GRORHID, 3 л",  price:"— ₽", mp:"WB/Ozon", link:"https://example.com" },
-      { id:"zam_3l",   name:"Грунт для Замиокулькаса GRORHID, 3 л",  price:"— ₽", mp:"WB/Ozon", link:"https://example.com" },
-      { id:"phal_3l",  name:"Субстрат для Орхидеи (Фаленопсис) GRORHID, 3 л", price:"— ₽", mp:"WB/Ozon", link:"https://example.com" }
+    // ВАЖНО: ссылки на видео можно заменить на конкретные (YouTube / RuTube / VK).
+    // Сейчас стоят безопасные поисковые ссылки на YouTube по запросу "пересадка ..."
+    const plants = [
+      {
+        id: "spathiphyllum",
+        ru: "Спатифиллум",
+        lat: "Spathiphyllum",
+        tag: "Влажные тропики",
+        short: "Любит равномерную влажность без «болота». Хорошо реагирует на тёплый душ и стабильный уход.",
+        wild: "Спатифиллум — тропическое растение под пологом леса: рассеянный свет, тёплый воздух, постоянно влажный, но рыхлый субстрат. В природе корни получают кислород даже при высокой влажности — поэтому дома важно не превращать грунт в плотную «кашу».",
+        env: [
+          "Свет: яркий рассеянный, без прямого солнца (особенно летом).",
+          "Температура: 18–27°C, без резких сквозняков.",
+          "Влажность: средняя/высокая; полезны опрыскивания и душ (при тёплой воде)."
+        ],
+        water: [
+          "Поливай, когда подсохнут верхние 2–3 см субстрата.",
+          "Лей до выхода воды в поддон, затем лишнее сливай через 10–15 минут.",
+          "Зимой полив реже (холодный подоконник = риск перелива).",
+          "Ориентир: листья теряют тургор/слегка «поникают» — обычно просит воду."
+        ],
+        repot: [
+          "Планово: раз в 12–18 месяцев (если активно растёт).",
+          "Срочно: при закисании грунта, запахе сырости, плесени, проблемах с корнями.",
+          "Горшок: +2–3 см к диаметру, обязательно дренажные отверстия.",
+          "После пересадки: 5–7 дней без «заливов», только умеренно."
+        ],
+        repotNote: "Ключ: рыхлый, воздухопроницаемый субстрат. Плотный грунт = риск гнилей.",
+        problems: [
+          "Жёлтые листья + мокрый ком: перелив/плохой дренаж.",
+          "Сухие коричневые кончики: сухой воздух/нерегулярный полив/жёсткая вода.",
+          "Вялость при влажном грунте: корни страдают от нехватки кислорода."
+        ],
+        videoText: "Видео: пересадка спатифиллума (подборка).",
+        videoUrl: "https://www.youtube.com/results?search_query=%D0%BF%D0%B5%D1%80%D0%B5%D1%81%D0%B0%D0%B4%D0%BA%D0%B0+%D1%81%D0%BF%D0%B0%D1%82%D0%B8%D1%84%D0%B8%D0%BB%D0%BB%D1%83%D0%BC%D0%B0"
+      },
+      {
+        id: "zamioculcas",
+        ru: "Замиокулькас",
+        lat: "Zamioculcas zamiifolia",
+        tag: "Засухоустойчивый",
+        short: "Главное правило: лучше недолить, чем перелить. Любит свет и редкий полив после полного просыхания.",
+        wild: "В природе замиокулькас растёт в более засушливых регионах (в т.ч. каменистые почвы), запасает влагу в клубнях/корневищах. Поэтому дома он терпит пропуски полива, но плохо переносит переувлажнение и плотный субстрат без воздуха.",
+        env: [
+          "Свет: от яркого рассеянного до солнца (адаптировать постепенно).",
+          "Температура: 18–30°C, не любит холод ниже 15°C.",
+          "Влажность: обычная комнатная; опрыскивания не обязательны."
+        ],
+        water: [
+          "Поливай только после полного просыхания кома (проверяй глубоко).",
+          "Лей умеренно, избыток воды обязательно сливай.",
+          "Зимой полив сильно реже (может 1 раз в 3–4 недели).",
+          "Если сомневаешься — подожди 2–3 дня и только потом полей."
+        ],
+        repot: [
+          "Планово: раз в 2–3 года (растёт медленно).",
+          "Срочно: если горшок «распирает» клубнями или грунт стал тяжёлым и пахнет сыростью.",
+          "Горшок: устойчивый, с отверстиями; размер умеренный (не «ведро»).",
+          "После пересадки: 7–10 дней без полива (даём ранкам подсохнуть)."
+        ],
+        repotNote: "Ключ: очень рыхлая смесь и дренаж. Перелив = основной враг замиокулькаса.",
+        problems: [
+          "Жёлтеют стебли/мягкие основания: перелив и гниль.",
+          "Листья морщатся: длительная пересушка (редко), но чаще — проблемы с корнями.",
+          "Не растёт: мало света или слишком большой горшок."
+        ],
+        videoText: "Видео: пересадка замиокулькаса (подборка).",
+        videoUrl: "https://www.youtube.com/results?search_query=%D0%BF%D0%B5%D1%80%D0%B5%D1%81%D0%B0%D0%B4%D0%BA%D0%B0+%D0%B7%D0%B0%D0%BC%D0%B8%D0%BE%D0%BA%D1%83%D0%BB%D1%8C%D0%BA%D0%B0%D1%81%D0%B0"
+      },
+      {
+        id: "phalaenopsis",
+        ru: "Орхидея фаленопсис",
+        lat: "Phalaenopsis",
+        tag: "Эпифит",
+        short: "Живёт на деревьях, а не в земле. Нужна кора, воздух корням и правильный полив методом пролива/замачивания.",
+        wild: "Фаленопсис — эпифит: в природе растёт, закрепляясь на коре деревьев. Корни получают много воздуха и быстро просыхают после дождей. Поэтому дома фаленопсис нельзя сажать в «землю» — ему нужен субстрат на основе коры и хорошая вентиляция.",
+        env: [
+          "Свет: яркий рассеянный; восток/запад идеальны, юг только с притенением.",
+          "Температура: 18–28°C; перепады день/ночь стимулируют цветение.",
+          "Влажность: 40–70%; важна циркуляция воздуха (без сквозняков)."
+        ],
+        water: [
+          "Полив по состоянию корней: серебристые/серые = пора поливать, зелёные = рано.",
+          "Метод: пролив до выхода воды или замачивание 10–15 минут, затем полностью слить.",
+          "Никогда не оставляй воду в точке роста (в центре розетки).",
+          "Частота: обычно 1 раз в 7–10 дней, но зависит от температуры и субстрата."
+        ],
+        repot: [
+          "Планово: раз в 1,5–2 года (кора разлагается).",
+          "Срочно: если кора стала трухой, запах, плесень, корни гниют, много пустот/уплотнение.",
+          "Пересадка: удалить гнилые корни, срезы подсушить, посадить в свежую кору.",
+          "После пересадки: 3–5 дней не поливать (если были срезы)."
+        ],
+        repotNote: "Ключ: воздух корням и правильная кора. «Земля» для орхидей почти всегда приводит к проблемам.",
+        problems: [
+          "Жёлтые нижние листья: иногда норма (старение), но проверь корни.",
+          "Мягкие корни/запах: перелив, плохая кора, мало воздуха.",
+          "Сморщенные листья: проблемы с корнями или длительная пересушка."
+        ],
+        videoText: "Видео: пересадка фаленопсиса (подборка).",
+        videoUrl: "https://www.youtube.com/results?search_query=%D0%BF%D0%B5%D1%80%D0%B5%D1%81%D0%B0%D0%B4%D0%BA%D0%B0+%D1%84%D0%B0%D0%BB%D0%B5%D0%BD%D0%BE%D0%BF%D1%81%D0%B8%D1%81%D0%B0"
+      }
     ];
 
+    // --- Cart state (local) ---
     const cart = new Map(); // id -> qty
 
-    function render() {
-      const root = document.getElementById("list");
-      root.innerHTML = "";
+    // --- Telegram Mini App UI polish ---
+    try {
+      const tg = window.Telegram?.WebApp;
+      if (tg) {
+        tg.ready();
+        tg.expand();
+      }
+    } catch(_) {}
 
-      PRODUCTS.forEach(p => {
-        const qty = cart.get(p.id) || 0;
+    // --- Rendering ---
+    const grid = document.getElementById("grid");
+    const q = document.getElementById("q");
 
-        const el = document.createElement("div");
-        el.className = "card";
-        el.innerHTML = `
-          <div class="row">
-            <div>
-              <div class="name">${p.name}</div>
-              <div class="tag">${p.mp}</div>
+    function renderGrid(){
+      const query = (q.value || "").trim().toLowerCase();
+      const items = plants.filter(p=>{
+        if(!query) return true;
+        return (p.ru + " " + p.lat + " " + p.tag).toLowerCase().includes(query);
+      });
+
+      grid.innerHTML = items.map(p => `
+        <div class="card">
+          <div class="thumb">
+            <span class="tag">${escapeHtml(p.tag)}</span>
+          </div>
+
+          <div class="content">
+            <div class="name">
+              <div class="ru">${escapeHtml(p.ru)}</div>
+              <div class="lat">${escapeHtml(p.lat)}</div>
             </div>
-            <div class="price">${p.price}</div>
-          </div>
-          <div class="btns">
-            <a class="btn primary" href="${p.link}" target="_blank" rel="noopener">Открыть</a>
-            <button class="ghost" data-act="minus" data-id="${p.id}">−</button>
-            <button class="ghost" data-act="plus" data-id="${p.id}">+</button>
-            <button class="ghost" data-act="clear" data-id="${p.id}">Убрать</button>
-            <span class="tag">В корзине: <b>${qty}</b></span>
-          </div>
-        `;
-        root.appendChild(el);
-      });
 
-      // кнопка отправки корзины в бот
-      const send = document.createElement("div");
-      send.className = "card";
-      send.innerHTML = `
-        <div class="row">
-          <div>
-            <div class="name">Корзина</div>
-            <div class="tag">Отправим список выбранного прямо в чат с ботом</div>
+            <div class="mini">${escapeHtml(p.short)}</div>
+
+            <div class="actions">
+              <button class="btn" onclick="openDetails('${p.id}')">Подробнее</button>
+              <button class="btn primary" onclick="addToCart('${p.id}')">В корзину</button>
+            </div>
           </div>
         </div>
-        <div class="btns">
-          <button class="primary" id="sendCart">Отправить корзину в бот</button>
-          <button class="ghost" id="resetAll">Очистить всё</button>
-        </div>
-      `;
-      root.appendChild(send);
-
-      root.querySelectorAll("button[data-act]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const act = btn.dataset.act;
-          const id = btn.dataset.id;
-          const cur = cart.get(id) || 0;
-          if (act === "plus") cart.set(id, cur + 1);
-          if (act === "minus") cart.set(id, Math.max(0, cur - 1));
-          if (act === "clear") cart.set(id, 0);
-          if ((cart.get(id) || 0) === 0) cart.delete(id);
-          render();
-        });
-      });
-
-      document.getElementById("resetAll").onclick = () => { cart.clear(); render(); };
-
-      document.getElementById("sendCart").onclick = () => {
-        const items = [];
-        for (const [id, qty] of cart.entries()) {
-          const p = PRODUCTS.find(x => x.id === id);
-          items.push({ id, name:p?.name || id, qty, link:p?.link });
-        }
-        const payload = { type:"cart", items, ts: Date.now() };
-        if (tg) {
-          tg.sendData(JSON.stringify(payload));
-          tg.close();
-        } else {
-          alert("Открой это из Telegram Mini App, чтобы отправлять данные в бот.");
-        }
-      };
+      `).join("") || `<div class="block" style="grid-column:1/-1;">
+        <h3>Ничего не найдено</h3>
+        <p>Попробуй другой запрос или очисти поиск.</p>
+      </div>`;
     }
 
-    render();
+    q.addEventListener("input", renderGrid);
+
+    // --- Modal ---
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const mTitle = document.getElementById("mTitle");
+    const mSub = document.getElementById("mSub");
+    const mWild = document.getElementById("mWild");
+    const mEnv = document.getElementById("mEnv");
+    const mWater = document.getElementById("mWater");
+    const mRepot = document.getElementById("mRepot");
+    const mRepotNote = document.getElementById("mRepotNote");
+    const mProblems = document.getElementById("mProblems");
+    const mVideoText = document.getElementById("mVideoText");
+    const mVideoBtn = document.getElementById("mVideoBtn");
+    const mAddBtn = document.getElementById("mAddBtn");
+    const mClose = document.getElementById("mClose");
+
+    let activePlantId = null;
+
+    window.openDetails = function(id){
+      const p = plants.find(x=>x.id===id);
+      if(!p) return;
+
+      activePlantId = id;
+
+      mTitle.textContent = p.ru;
+      mSub.textContent = `${p.lat} • ${p.tag}`;
+      mWild.textContent = p.wild;
+
+      mEnv.innerHTML = p.env.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+      mWater.innerHTML = p.water.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+      mRepot.innerHTML = p.repot.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+      mRepotNote.textContent = p.repotNote || "";
+      mProblems.innerHTML = p.problems.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+      mVideoText.textContent = p.videoText || "Видео по пересадке.";
+
+      mVideoBtn.onclick = () => openVideo(p.videoUrl);
+      mAddBtn.onclick = () => addToCart(p.id);
+
+      modalBackdrop.style.display = "flex";
+      modalBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal(){
+      modalBackdrop.style.display = "none";
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      activePlantId = null;
+    }
+
+    mClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e)=>{
+      if(e.target === modalBackdrop) closeModal();
+    });
+
+    // --- Video open (Mini App safe) ---
+    function openVideo(url){
+      // Внутри Telegram лучше открывать через tg.openLink
+      const tg = window.Telegram?.WebApp;
+      if(tg && typeof tg.openLink === "function"){
+        tg.openLink(url);
+      } else {
+        window.open(url, "_blank");
+      }
+    }
+
+    // --- Cart UI ---
+    const cartBtn = document.getElementById("cartBtn");
+    const cartCount = document.getElementById("cartCount");
+    const drawer = document.getElementById("drawer");
+    const drawerShade = document.getElementById("drawerShade");
+    const drawerClose = document.getElementById("drawerClose");
+    const cartItems = document.getElementById("cartItems");
+    const totalItems = document.getElementById("totalItems");
+    const clearCart = document.getElementById("clearCart");
+    const checkout = document.getElementById("checkout");
+
+    cartBtn.addEventListener("click", openCart);
+    drawerShade.addEventListener("click", closeCart);
+    drawerClose.addEventListener("click", closeCart);
+    clearCart.addEventListener("click", ()=>{
+      cart.clear();
+      renderCart();
+      updateBadge();
+    });
+
+    checkout.addEventListener("click", ()=>{
+      if(cart.size === 0){
+        alert("Корзина пустая. Добавь хотя бы одно растение.");
+        return;
+      }
+      const text = buildOrderText();
+      const tg = window.Telegram?.WebApp;
+
+      // Вариант 1: открыть чат поддержки с текстом
+      const url = `https://t.me/${SUPPORT_USERNAME}?text=${encodeURIComponent(text)}`;
+      if(tg && typeof tg.openTelegramLink === "function"){
+        tg.openTelegramLink(url);
+      } else if(tg && typeof tg.openLink === "function"){
+        tg.openLink(url);
+      } else {
+        window.open(url, "_blank");
+      }
+    });
+
+    window.addToCart = function(id){
+      const qty = cart.get(id) || 0;
+      cart.set(id, qty + 1);
+      updateBadge();
+      // лёгкая обратная связь
+      try {
+        window.Telegram?.WebApp?.HapticFeedback?.impactOccurred("light");
+      } catch(_) {}
+    }
+
+    function updateBadge(){
+      let sum = 0;
+      for(const v of cart.values()) sum += v;
+      cartCount.textContent = String(sum);
+      totalItems.textContent = String(sum);
+    }
+
+    function openCart(){
+      renderCart();
+      drawer.style.display = "flex";
+      drawer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeCart(){
+      drawer.style.display = "none";
+      drawer.setAttribute("aria-hidden", "true");
+    }
+
+    function renderCart(){
+      if(cart.size === 0){
+        cartItems.innerHTML = `
+          <div class="block">
+            <h3>Корзина пустая</h3>
+            <p>Добавь растения из каталога — тут появится список.</p>
+          </div>
+        `;
+        updateBadge();
+        return;
+      }
+
+      const rows = [];
+      for(const [id, qty] of cart.entries()){
+        const p = plants.find(x=>x.id===id);
+        if(!p) continue;
+        rows.push({p, qty});
+      }
+
+      cartItems.innerHTML = rows.map(({p, qty}) => `
+        <div class="item">
+          <div class="left">
+            <div class="n">${escapeHtml(p.ru)}</div>
+            <div class="d">${escapeHtml(p.tag)} • ${escapeHtml(p.lat)}</div>
+          </div>
+
+          <div class="qty">
+            <button class="qbtn" onclick="decQty('${p.id}')">−</button>
+            <div class="qval">${qty}</div>
+            <button class="qbtn" onclick="incQty('${p.id}')">+</button>
+          </div>
+        </div>
+      `).join("");
+
+      updateBadge();
+    }
+
+    window.incQty = function(id){
+      cart.set(id, (cart.get(id)||0) + 1);
+      renderCart();
+    }
+    window.decQty = function(id){
+      const v = (cart.get(id)||0) - 1;
+      if(v <= 0) cart.delete(id);
+      else cart.set(id, v);
+      renderCart();
+    }
+
+    function buildOrderText(){
+      const lines = [];
+      lines.push("Здравствуйте! Хочу консультацию/подбор по растениям. Мой выбор в каталоге:");
+      for(const [id, qty] of cart.entries()){
+        const p = plants.find(x=>x.id===id);
+        if(!p) continue;
+        lines.push(`• ${p.ru} — ${qty} шт.`);
+      }
+      lines.push("");
+      lines.push("Нужны рекомендации по уходу/пересадке и ссылки на товары (грунт/компоненты) под эти растения.");
+      return lines.join("\n");
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // Initial render
+    renderGrid();
+    updateBadge();
   </script>
 </body>
 </html>
